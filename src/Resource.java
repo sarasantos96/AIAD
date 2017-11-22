@@ -5,10 +5,11 @@ import java.util.ArrayList;
 
 public class Resource extends Agent{
     private String name;
-    private ArrayList<String> available_treatments;
+    private ArrayList<Treatment> available_treatments;
     private ArrayList<Pair<Integer,Patient>> reserves;
 
     protected void setup() {
+        /*
         System.out.println("Resource agent " + getAID().getName() + " is ready.");
 
         Object[] args = getArguments();
@@ -19,7 +20,9 @@ public class Resource extends Agent{
         }else{
             System.out.println("No resource specified");
             doDelete();
-        }
+        }*/
+        ResourceBehaviour r = new ResourceBehaviour();
+        addBehaviour(r);
     }
 
     protected void takeDown() {

@@ -7,5 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" exported="" name="jade" level="project" />
+    <orderEntry type="library" exported="" name="SAJaS" level="project" />
   </component>
 </module>
