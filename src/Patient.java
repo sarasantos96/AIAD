@@ -7,6 +7,13 @@ public class Patient extends Agent{
     private ArrayList<String> treatments;
 
     protected void setup(){
-
+        PatientBehaviour r = new PatientBehaviour();
+        addBehaviour(r);
+        System.out.println("Message receiver start");
     }
+
+    protected void takeDown() {
+        System.out.println("Resource agent " + getAID().getName() + " is terminating");
+    }
+
 }

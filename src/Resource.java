@@ -7,21 +7,29 @@ public class Resource extends Agent{
     private String name;
     private ArrayList<Treatment> available_treatments;
     private ArrayList<Pair<Integer,Patient>> reserves;
+    private ArrayList<AID> all_patients = new ArrayList<>();
 
     protected void setup() {
-        /*
         System.out.println("Resource agent " + getAID().getName() + " is ready.");
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-            this.name = (String) args[0];
+         /*   this.name = (String) args[0];
             System.out.println("Resource name is " + this.name);
             //TODO Definir como vão ser passados os tratamentos disponíveis e os pares
+        */
+         for(int i = 0; i < args.length; i++){
+             AID p = new AID((String) args[i],AID.ISLOCALNAME);
+             all_patients.add(p);
+         }
         }else{
-            System.out.println("No resource specified");
-            doDelete();
-        }*/
-        ResourceBehaviour r = new ResourceBehaviour();
+            AID p = new AID("p",AID.ISLOCALNAME);
+            p.getName();
+            all_patients.add(p);
+            //System.out.println("No resource specified");
+            //doDelete();
+        }
+        ResourceBehaviour r = new ResourceBehaviour(all_patients);
         addBehaviour(r);
     }
 
