@@ -1,8 +1,5 @@
-import agents.Patient;
-import jade.core.Agent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
-import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
@@ -14,7 +11,7 @@ public class Hospital {
     {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("How many patients?");
+        System.out.print("How many patients?");
         int num_patients = scanner.nextInt();
 
         //Cria container
@@ -23,8 +20,8 @@ public class Hospital {
         profile.setParameter(Profile.MAIN_HOST, "localhost");
         profile.setParameter(Profile.GUI, "true");
         ContainerController containerController = runtime.createMainContainer(profile);
-
         AgentController ac = null;
+
         try {
             for(int i = 1; i <= num_patients; i++){
                 ac = containerController.createNewAgent("P"+i, "agents.Patient",  null);
@@ -33,6 +30,6 @@ public class Hospital {
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
-        return;
+
     }
 }
