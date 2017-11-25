@@ -1,3 +1,5 @@
+package behaviours;
+
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -11,7 +13,7 @@ public class PatientBehaviour extends CyclicBehaviour {
             // Message received. Process it
             String msgContents = msg.getContent();
 
-            System.out.println("Agent Patient " + myAgent.getName() + " received " + msgContents);
+            System.out.println("Agent agents.Patient " + myAgent.getName() + " received " + msgContents);
         }
         else{
            // System.out.println("no message");

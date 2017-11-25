@@ -1,3 +1,5 @@
+package behaviours;
+
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -9,7 +11,7 @@ public class ResourceBehaviour extends SimpleBehaviour{
 
     ArrayList<AID> agentsSend;
 
-    ResourceBehaviour(ArrayList<AID> agentsSend){
+    public ResourceBehaviour(ArrayList<AID> agentsSend){
 
         this.agentsSend = agentsSend;
     }

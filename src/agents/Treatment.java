@@ -1,3 +1,4 @@
+package agents;
 
 public class Treatment {
     private String name;

@@ -1,3 +1,6 @@
+package agents;
+
+import behaviours.PatientBehaviour;
 import jade.core.*;
 
 import java.util.ArrayList;
@@ -13,7 +16,7 @@ public class Patient extends Agent{
     }
 
     protected void takeDown() {
-        System.out.println("Resource agent " + getAID().getName() + " is terminating");
+        System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
     }
 
 }
