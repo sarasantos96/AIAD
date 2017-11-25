@@ -12,7 +12,7 @@ public class Patient extends Agent{
     protected void setup(){
         PatientBehaviour r = new PatientBehaviour();
         addBehaviour(r);
-        System.out.println("Message receiver start");
+        System.out.println("Message receiver start " + getAID().getName());
     }
 
     protected void takeDown() {
