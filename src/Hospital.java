@@ -23,10 +23,15 @@ public class Hospital {
         AgentController ac = null;
 
         try {
+            Object[] ob = new Object[1];
+            ob[0] = "test";
+
             for(int i = 1; i <= num_patients; i++){
-                ac = containerController.createNewAgent("P"+i, "agents.Patient",  null);
+                ac = containerController.createNewAgent("r"+i, "agents.Resource",  ob);
+                ac.start();
             }
-            ac.start();
+           //ac = containerController.createNewAgent("P", "agents.Patient",  null);
+            // ac.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
