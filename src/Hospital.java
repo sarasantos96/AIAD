@@ -25,13 +25,16 @@ public class Hospital {
         try {
             Object[] ob = new Object[1];
             ob[0] = "test";
-
+            Object[] ob2 = new Object[1];
+            ob2[0] = "test2";
             for(int i = 1; i <= num_patients; i++){
                 ac = containerController.createNewAgent("r"+i, "agents.Resource",  ob);
                 ac.start();
             }
-           //ac = containerController.createNewAgent("P", "agents.Patient",  null);
-            // ac.start();
+           ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
+           ac.start();
+           ac = containerController.createNewAgent("P", "agents.Patient",  null);
+           ac.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }

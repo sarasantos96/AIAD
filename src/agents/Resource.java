@@ -1,6 +1,7 @@
 package agents;
 
 import agents.Patient;
+import behaviours.ReceiveSubscriberBehaviour;
 import behaviours.ResourceBehaviour;
 import jade.core.*;
 import jade.domain.DFService;
@@ -17,6 +18,7 @@ public class Resource extends Agent{
     private ArrayList<Pair<Integer, Patient>> reserves;
     private ArrayList<AID> all_patients = new ArrayList<>();
 
+
     protected void setup() {
         System.out.println("agents.Resource agent " + getAID().getLocalName() + " is ready.");
 
@@ -28,9 +30,10 @@ public class Resource extends Agent{
         */
             DFAgentDescription dfd = new DFAgentDescription();
             dfd.setName(getAID());
-         for(int i = 0; i < args.length; i++){
+         for(int i = 0; i < args.length; i ++){
            //  AID p = new AID((String) args[i],AID.ISLOCALNAME);
              //all_patients.add(p);
+
              ServiceDescription sd = new ServiceDescription();
              sd.setType("treatment");
              sd.setName((String)args[i]);
@@ -50,10 +53,14 @@ public class Resource extends Agent{
             //System.out.println("No resource specified");
             //doDelete();
         }
+        ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
         //ResourceBehaviour r = new ResourceBehaviour(all_patients);
-        //addBehaviour(r);
+        addBehaviour(r);
     }
 
+    public void addSubscribedPatient(AID patient){
+        this.all_patients.add(patient);
+    }
     protected void takeDown() {
         System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
     }

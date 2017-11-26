@@ -13,6 +13,7 @@ public class PatientBehaviour extends CyclicBehaviour {
             // Message received. Process it
             String msgContents = msg.getContent();
 
+
             System.out.println("Agent agents.Patient " + myAgent.getName() + " received " + msgContents);
         }
         else{
