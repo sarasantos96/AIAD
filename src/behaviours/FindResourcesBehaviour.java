@@ -9,26 +9,27 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class FindResourcesBehaviour extends SimpleBehaviour {
 
-    ArrayList<String> treatmentsList = new ArrayList<>();
+    LinkedList<String> treatmentsList = new LinkedList<>();
 
-    public FindResourcesBehaviour(ArrayList<String> treatmentsList){
+    public FindResourcesBehaviour(LinkedList<String> treatmentsList){
         this.treatmentsList = treatmentsList;
     }
 
     @Override
     public void action() {
         DFAgentDescription template = new DFAgentDescription();
-        for(int i = 0; i< treatmentsList.size(); i++){
+        //for(int i = 0; i< treatmentsList.size(); i++){
 
             ServiceDescription sd = new ServiceDescription();
             sd.setType("treatment");
-            sd.setName(treatmentsList.get(i));
+            sd.setName(treatmentsList.remove());
             template.addServices(sd);
 
-        }
+        //}
         try {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             msg.setLanguage("English");

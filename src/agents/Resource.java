@@ -38,6 +38,7 @@ public class Resource extends Agent{
              sd.setType("treatment");
              sd.setName((String)args[i]);
              dfd.addServices(sd);
+             System.out.println("I have the treatment " + args[i]);
          }
             try {
                 DFService.register(this, dfd);
