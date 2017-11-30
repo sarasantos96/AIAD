@@ -25,7 +25,7 @@ public class ReceiveSubscriberBehaviour extends CyclicBehaviour {
 
         }
         else{
-            // System.out.println("no message");
+            block();
         }
     }
 }

@@ -1,33 +1,32 @@
 package behaviours;
 
-import jade.core.AID;
+import agents.Resource;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
-
-import java.util.ArrayList;
 
 public class ResourceBehaviour extends SimpleBehaviour{
     private int t = 0;
 
-    ArrayList<AID> agentsSend;
+    Resource r;
 
-    public ResourceBehaviour(ArrayList<AID> agentsSend){
+    public ResourceBehaviour(Resource r){
 
-        this.agentsSend = agentsSend;
+        this.r = r;
     }
 
     @Override
     public void action() {
         ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
         msg.setLanguage("English");
-        msg.setContent("Receive this!");
-        for(int i = 0; i < agentsSend.size(); i++){
+        msg.setContent("When can you come?");
+        msg.setPerformative(ACLMessage.PROPOSE);
+        for(int i = 0; i < r.getAllPatients().size(); i++){
 
-        msg.addReceiver( agentsSend.get(i));
+        msg.addReceiver( r.getAllPatients().get(i));
 
         }
         myAgent.send(msg);
-        System.out.println("Sent a message");
+        System.out.println(myAgent.getName() + " sent a message");
 
     }
 
