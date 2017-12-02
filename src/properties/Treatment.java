@@ -1,4 +1,4 @@
-package agents;
+package properties;
 
 public class Treatment {
     private String name;

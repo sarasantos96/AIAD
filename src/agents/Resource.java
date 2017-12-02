@@ -10,6 +10,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import javafx.util.Pair;
+import properties.Treatment;
 
 import java.util.ArrayList;
 
