@@ -14,19 +14,22 @@ public class ResourceBehaviour extends Behaviour {
 
     Resource r;
     int step = 0;
-    int getAllProposals = r.getAllPatients().size();
+    int getAllProposals = 0;
     double bestPriority = 0;
     ArrayList<AID> allPreparedPatients = new ArrayList<>();
     private MessageTemplate mt;
     public ResourceBehaviour(Resource r){
 
         this.r = r;
+
     }
 
     @Override
     public void action() {
+
         switch(step){
             case 0:
+                getAllProposals = r.getAllPatients().size();
                 ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
                 msg.setLanguage("English");
                 msg.setContent("When can you come?");
@@ -81,6 +84,8 @@ public class ResourceBehaviour extends Behaviour {
                         if(reply.getPerformative() == ACLMessage.PROPOSE){
                             if(Double.valueOf(reply.getContent()) > bestPriority){
                                 r.setNextPatient(reply.getSender());
+                                bestPriority = Double.valueOf(reply.getContent());
+                                System.out.println("I found a better priority: " + bestPriority);
                             }
                             getAllProposals++;
                         }
