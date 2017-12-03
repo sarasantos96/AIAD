@@ -5,12 +5,14 @@ import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 import java.util.LinkedList;
 
-public class PatientBehaviour extends Behaviour {
+public class PatientBehaviour extends CyclicBehaviour {
     Patient p;
     int step = 0;
+    private MessageTemplate mt = MessageTemplate.MatchConversationId("licitation-process1");
     public PatientBehaviour(Patient p){
         this.p = p;
     }
@@ -19,7 +21,7 @@ public class PatientBehaviour extends Behaviour {
     public void action() {
         switch(step){
             case 0:
-                ACLMessage msg= myAgent.receive();
+                ACLMessage msg= myAgent.receive(mt);
 
                 if (msg != null) {
                     // Message received. Process it
@@ -41,22 +43,13 @@ public class PatientBehaviour extends Behaviour {
 
                     }
                     myAgent.send(reply);
-
+                    mt = MessageTemplate.MatchConversationId("licitation-process2");
                 }
                 else{
                    block();
                 }
-            break;
-            case 1:
-
-            break;
+                break;
         }
-    }
-
-    @Override
-    public boolean done() {
-
-        return false;
     }
 
 

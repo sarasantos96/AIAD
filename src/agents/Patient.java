@@ -2,6 +2,7 @@ package agents;
 
 import behaviours.FindResourcesBehaviour;
 import behaviours.PatientBehaviour;
+import behaviours.PriorityBehaviour;
 import jade.core.*;
 import properties.Disease;
 import sun.awt.image.ImageWatched;
@@ -26,9 +27,11 @@ public class Patient extends Agent{
         treatments.add("test");
         treatments.add("test2");
         FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
+        PriorityBehaviour p = new PriorityBehaviour(this);
         System.out.println("Patient start " + getAID().getName());
         addBehaviour(f);
         addBehaviour(r);
+        addBehaviour(p);
 
 
 

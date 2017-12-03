@@ -19,6 +19,7 @@ public class Resource extends Agent{
     private ArrayList<Treatment> availableTreatments;
     private ArrayList<Pair<Integer, Patient>> reserves;
     private ArrayList<AID> allPatients = new ArrayList<>();
+    private AID nextPatient;
 
 
     protected void setup() {
@@ -76,6 +77,14 @@ public class Resource extends Agent{
     }
     protected void takeDown() {
         System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
+    }
+
+    public AID getNextPatient() {
+        return nextPatient;
+    }
+
+    public void setNextPatient(AID nextPatient) {
+        this.nextPatient = nextPatient;
     }
 
     public ArrayList<AID> getAllPatients() {
