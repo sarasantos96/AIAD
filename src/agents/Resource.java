@@ -60,7 +60,7 @@ public class Resource extends Agent{
         ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
         ResourceBehaviour r2 = new ResourceBehaviour(this);
         SequentialBehaviour seq = new SequentialBehaviour();
-        seq.addSubBehaviour( new WakerBehaviour( this, 30000 )
+        seq.addSubBehaviour( new WakerBehaviour( this, 35000 )
         {
             protected void onWake() {
                 System.out.println( "About to ask for times");

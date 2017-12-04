@@ -3,9 +3,11 @@ package behaviours;
 import agents.Resource;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 
 public class ReceiveSubscriberBehaviour extends CyclicBehaviour {
 
+    private MessageTemplate mt = MessageTemplate.MatchConversationId("subscriber-process");
     Resource r;
 
     public ReceiveSubscriberBehaviour(Resource r){
@@ -14,7 +16,7 @@ public class ReceiveSubscriberBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
-        ACLMessage msg= myAgent.receive();
+        ACLMessage msg= myAgent.receive(mt);
 
         if (msg != null) {
             // Message received. Process it

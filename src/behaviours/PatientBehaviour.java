@@ -11,7 +11,6 @@ import java.util.LinkedList;
 
 public class PatientBehaviour extends CyclicBehaviour {
     Patient p;
-    int step = 0;
     private MessageTemplate mt = MessageTemplate.MatchConversationId("licitation-process1");
     public PatientBehaviour(Patient p){
         this.p = p;
@@ -19,8 +18,6 @@ public class PatientBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
-        switch(step){
-            case 0:
                 ACLMessage msg= myAgent.receive(mt);
 
                 if (msg != null) {
@@ -43,13 +40,11 @@ public class PatientBehaviour extends CyclicBehaviour {
 
                     }
                     myAgent.send(reply);
-                    mt = MessageTemplate.MatchConversationId("licitation-process2");
                 }
                 else{
                    block();
                 }
-                break;
-        }
+
     }
 
 

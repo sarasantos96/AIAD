@@ -1,13 +1,17 @@
 package behaviours;
 
 import agents.Resource;
+import utils.PrioritiesComparator;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class ResourceBehaviour extends Behaviour {
     private int t = 0;
@@ -16,8 +20,10 @@ public class ResourceBehaviour extends Behaviour {
     int step = 0;
     int getAllProposals = 0;
     double bestPriority = 0;
+    Comparator<Pair<AID,Double>> comparator = new PrioritiesComparator();
+    PriorityQueue<Pair<AID,Double>> patientPriorities = new PriorityQueue<>(1000,comparator);
     ArrayList<AID> allPreparedPatients = new ArrayList<>();
-    private MessageTemplate mt;
+        private MessageTemplate mt;
     public ResourceBehaviour(Resource r){
 
         this.r = r;
@@ -82,11 +88,13 @@ public class ResourceBehaviour extends Behaviour {
                     ACLMessage reply = myAgent.receive(mt);
                     if(reply != null){
                         if(reply.getPerformative() == ACLMessage.PROPOSE){
-                            if(Double.valueOf(reply.getContent()) > bestPriority){
+                            Pair<AID,Double> patientPair = new Pair<>(reply.getSender(),Double.valueOf(reply.getContent()));
+                            /*if(Double.valueOf(reply.getContent()) > bestPriority){
                                 r.setNextPatient(reply.getSender());
                                 bestPriority = Double.valueOf(reply.getContent());
                                 System.out.println("I found a better priority: " + bestPriority);
-                            }
+                            }*/
+                            patientPriorities.offer(patientPair);
                             getAllProposals++;
                         }
                     }else{
@@ -95,12 +103,37 @@ public class ResourceBehaviour extends Behaviour {
                 }
 
                 break;
+            case 4:
+                ACLMessage msg3 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                msg3.setLanguage("English");
+                msg3.setContent("You have been Accepted!");
+                msg3.setConversationId("licitation-process3");
+                msg3.addReceiver( patientPriorities.poll().getKey());
+
+                myAgent.send(msg3);
+                mt = MessageTemplate.MatchConversationId("licitation-process3");
+                step = 5;
+                break;
+            case 5:
+                ACLMessage reply = myAgent.receive(mt);
+                if(reply != null){
+                    if(reply.getPerformative() == ACLMessage.AGREE){
+                        r.setNextPatient(reply.getSender());
+                        step = 6;
+                    }else if(reply.getPerformative() == ACLMessage.REFUSE){
+                        step = 4;
+                    }
+                }else{
+                    block();
+                }
+                break;
+
         }
     }
 
     @Override
     public boolean done() {
 
-        return step==4;
+        return step==6;
     }
 }

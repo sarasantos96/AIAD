@@ -23,6 +23,7 @@ public class PriorityBehaviour extends CyclicBehaviour{
             System.out.println("Agent agents.Patient " + myAgent.getName() + " received " + msgContents);
             reply.setPerformative(ACLMessage.PROPOSE);
             reply.setContent(String.valueOf(p.getPriority(10)));
+            System.out.println("Sending my Priority, I am " + myAgent.getLocalName());
             myAgent.send(reply);
         }
         else{

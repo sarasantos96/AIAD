@@ -1,5 +1,6 @@
 package agents;
 
+import behaviours.AcceptResourceBehaviour;
 import behaviours.FindResourcesBehaviour;
 import behaviours.PatientBehaviour;
 import behaviours.PriorityBehaviour;
@@ -28,10 +29,12 @@ public class Patient extends Agent{
         treatments.add("test2");
         FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
         PriorityBehaviour p = new PriorityBehaviour(this);
+        AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
         System.out.println("Patient start " + getAID().getName());
         addBehaviour(f);
         addBehaviour(r);
         addBehaviour(p);
+        addBehaviour(a);
 
 
 

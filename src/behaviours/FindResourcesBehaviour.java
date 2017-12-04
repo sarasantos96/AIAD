@@ -41,6 +41,7 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
                 msg.addReceiver(result[i].getName());
 
             }
+            msg.setConversationId("subscriber-process");
             myAgent.send(msg);
 
 
