@@ -28,16 +28,17 @@ public class PatientBehaviour extends CyclicBehaviour {
 
                     if(p.getAvailability()) {
 
-                         p.addResourceUse(msg.getSender());
+                        //p.addResourceUse(msg.getSender());
                         reply.setPerformative(ACLMessage.AGREE);
                         reply.setContent("I am ready!");
+                        System.out.println("I " + myAgent.getLocalName() + " am ready!");
 
 
                     }else{
 
                         reply.setPerformative(ACLMessage.REFUSE);
                         reply.setContent("I am not ready...");
-
+                        System.out.println("I " + myAgent.getLocalName() + " am not ready!");
                     }
                     myAgent.send(reply);
                 }

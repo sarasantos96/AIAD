@@ -30,6 +30,7 @@ public class AcceptResourceBehaviour extends CyclicBehaviour {
                     unMsg.addReceiver(p.getCurrentResources().get(i));
                 }
                 myAgent.send(unMsg);
+                p.setAvailability(false);
                 p.finishTreatment();
             }else{
                 reply.setPerformative(ACLMessage.REFUSE);

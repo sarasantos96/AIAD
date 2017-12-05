@@ -1,5 +1,6 @@
 package behaviours.patientbehaviours;
 
+import agents.Patient;
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.domain.DFService;
@@ -13,20 +14,21 @@ import java.util.LinkedList;
 
 public class FindResourcesBehaviour extends SimpleBehaviour {
 
-    LinkedList<String> treatmentsList = new LinkedList<>();
+    Patient p;
 
-    public FindResourcesBehaviour(LinkedList<String> treatmentsList){
-        this.treatmentsList = treatmentsList;
+    public FindResourcesBehaviour(Patient p){
+        this.p = p;
     }
 
     @Override
     public void action() {
+        p.setAvailability(true);
         DFAgentDescription template = new DFAgentDescription();
         //for(int i = 0; i< treatmentsList.size(); i++){
 
             ServiceDescription sd = new ServiceDescription();
             sd.setType("treatment");
-            sd.setName(treatmentsList.remove());
+            sd.setName(p.getTreatments().remove());
             template.addServices(sd);
 
         //}
@@ -39,6 +41,7 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
             for (int i = 0; i < result.length; ++i) {
                 System.out.println(result[i].getName().getLocalName());
                 msg.addReceiver(result[i].getName());
+                p.addResourceUse(result[i].getName());
 
             }
             msg.setConversationId("subscriber-process");

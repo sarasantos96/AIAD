@@ -5,6 +5,8 @@ import behaviours.patientbehaviours.FindResourcesBehaviour;
 import behaviours.patientbehaviours.PatientBehaviour;
 import behaviours.patientbehaviours.PriorityBehaviour;
 import jade.core.*;
+import jade.core.behaviours.SequentialBehaviour;
+import jade.core.behaviours.WakerBehaviour;
 import properties.Disease;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
@@ -12,7 +14,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Patient extends Agent{
-    private String medical_condition;
+    private String medical_condition = "Sick";
     private LinkedList<String> treatments = new LinkedList<>();
     private ArrayList<AID> currentResources = new ArrayList<>();
     private boolean availability = true;
@@ -28,7 +30,7 @@ public class Patient extends Agent{
         PatientBehaviour r = new PatientBehaviour(this);
 
         treatments.add("test");
-        //treatments.add("test2");
+        treatments.add("test2");
 
 
         PriorityBehaviour p = new PriorityBehaviour(this);
@@ -45,18 +47,40 @@ public class Patient extends Agent{
 
     }
 
-    protected void takeDown() {
-        System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
-        doDelete();
+    protected void takeDown(){
+        medical_condition = "cured";
+        availability = false;
+        System.out.println("I, " + getAID().getLocalName() + " am cured.");
     }
-    public void addResourceUse(AID p){currentResources.add(p); }
+
+    public void addResourceUse(AID p){
+        currentResources.add(p);
+    }
+
     public boolean getAvailability(){
         return availability;
     }
 
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
     public void subscribeTreatments(){
-        FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
+        FindResourcesBehaviour f = new FindResourcesBehaviour(this);
         addBehaviour(f);
+    }
+
+    public void startTreatment(int duration){
+        FindResourcesBehaviour f = new FindResourcesBehaviour(this);
+        SequentialBehaviour seq = new SequentialBehaviour();
+        seq.addSubBehaviour( new WakerBehaviour( this, duration )
+        {
+            protected void onWake() {
+                System.out.println( "Trying to start new treatment.");
+            }
+        });
+        seq.addSubBehaviour(f);
+        addBehaviour(seq);
     }
 
     public double getPriority(){
@@ -84,6 +108,10 @@ public class Patient extends Agent{
         return elapsedSeconds;
     }
 
+    public LinkedList<String> getTreatments() {
+        return treatments;
+    }
+
     public ArrayList<AID> getCurrentResources() {
         return currentResources;
     }
@@ -91,9 +119,12 @@ public class Patient extends Agent{
     public void finishTreatment(){
         currentResources.clear();
         if(!treatments.isEmpty()){
-            subscribeTreatments();
+            startTreatment(20000);
         }else{
             this.takeDown();
         }
     }
+
+
+
 }
