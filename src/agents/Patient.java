@@ -16,19 +16,25 @@ public class Patient extends Agent{
     private LinkedList<AID> currentResources = new LinkedList<>();
     private boolean availability = true;
     private Disease disease;
+    long tStart;
 
     protected void setup(){
 
         Object[] args = getArguments();
         disease = new Disease((String) args[0],Integer.parseInt((String)args[1]),Integer.parseInt((String)args[2]));
-        getPriority(10);
+        tStart = System.currentTimeMillis();
+
         PatientBehaviour r = new PatientBehaviour(this);
+
         treatments.add("test");
         treatments.add("test2");
+
         FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
         PriorityBehaviour p = new PriorityBehaviour(this);
         AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
+
         System.out.println("Patient start " + getAID().getName());
+
         addBehaviour(f);
         addBehaviour(r);
         addBehaviour(p);
@@ -46,8 +52,11 @@ public class Patient extends Agent{
         return availability;
     }
 
-    public int getPriority(int t){
 
+
+    public double getPriority(){
+
+        double t = currTimeSeconds();
         NormalDistribution d = new NormalDistribution(t/2,1);
 
 
@@ -61,5 +70,12 @@ public class Patient extends Agent{
 
         }
         return prior;
+    }
+
+    private double currTimeSeconds(){
+        long tEnd = System.currentTimeMillis();
+        long tDelta = tEnd - tStart;
+        double elapsedSeconds = tDelta / 1000.0;
+        return elapsedSeconds;
     }
 }
