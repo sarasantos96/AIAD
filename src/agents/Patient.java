@@ -65,7 +65,7 @@ public class Patient extends Agent{
 
             double a = disease.getSeverity()*i;
             double b = (disease.getCriticality()/2) *(i*i);
-            double p = d.cumulativeProbability(i);
+            double p = d.probability(i-1,i);
             prior += p*(a+b);
 
         }
