@@ -8,12 +8,13 @@ import jade.core.*;
 import properties.Disease;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Patient extends Agent{
     private String medical_condition;
     private LinkedList<String> treatments = new LinkedList<>();
-    private LinkedList<AID> currentResources = new LinkedList<>();
+    private ArrayList<AID> currentResources = new ArrayList<>();
     private boolean availability = true;
     private Disease disease;
     long tStart;
@@ -27,15 +28,15 @@ public class Patient extends Agent{
         PatientBehaviour r = new PatientBehaviour(this);
 
         treatments.add("test");
-        treatments.add("test2");
+        //treatments.add("test2");
 
-        FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
+
         PriorityBehaviour p = new PriorityBehaviour(this);
         AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
 
         System.out.println("Patient start " + getAID().getName());
 
-        addBehaviour(f);
+        subscribeTreatments();
         addBehaviour(r);
         addBehaviour(p);
         addBehaviour(a);
@@ -46,13 +47,17 @@ public class Patient extends Agent{
 
     protected void takeDown() {
         System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
+        doDelete();
     }
     public void addResourceUse(AID p){currentResources.add(p); }
     public boolean getAvailability(){
         return availability;
     }
 
-
+    public void subscribeTreatments(){
+        FindResourcesBehaviour f = new FindResourcesBehaviour(treatments);
+        addBehaviour(f);
+    }
 
     public double getPriority(){
 
@@ -77,5 +82,18 @@ public class Patient extends Agent{
         long tDelta = tEnd - tStart;
         double elapsedSeconds = tDelta / 1000.0;
         return elapsedSeconds;
+    }
+
+    public ArrayList<AID> getCurrentResources() {
+        return currentResources;
+    }
+
+    public void finishTreatment(){
+        currentResources.clear();
+        if(!treatments.isEmpty()){
+            subscribeTreatments();
+        }else{
+            this.takeDown();
+        }
     }
 }

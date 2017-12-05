@@ -1,6 +1,7 @@
 package agents;
 
 import behaviours.resourcebehaviours.ReceiveSubscriberBehaviour;
+import behaviours.resourcebehaviours.ReceiveUnsubscriptionBehaviour;
 import behaviours.resourcebehaviours.ResourceBehaviour;
 import jade.core.*;
 import jade.core.behaviours.SequentialBehaviour;
@@ -18,8 +19,16 @@ public class Resource extends Agent{
     private String name;
     private ArrayList<Treatment> availableTreatments;
     private ArrayList<Pair<Integer, Patient>> reserves;
-    private ArrayList<AID> allPatients = new ArrayList<>();
+    private ArrayList<AID> allSubscribedPatients = new ArrayList<>();
     private AID nextPatient;
+
+    private SequentialBehaviour inTreatmentBehaviour = new SequentialBehaviour() {
+        public int onEnd() {
+            reset();
+            myAgent.addBehaviour(this);
+            return super.onEnd();
+        }
+    };
 
 
     protected void setup() {
@@ -35,7 +44,7 @@ public class Resource extends Agent{
             dfd.setName(getAID());
          for(int i = 0; i < args.length; i ++){
            //  AID p = new AID((String) args[i],AID.ISLOCALNAME);
-             //allPatients.add(p);
+             //allSubscribedPatients.add(p);
 
              ServiceDescription sd = new ServiceDescription();
              sd.setType("treatment");
@@ -52,30 +61,40 @@ public class Resource extends Agent{
         }else{
             AID p = new AID("p",AID.ISLOCALNAME);
             p.getName();
-            allPatients.add(p);
+            allSubscribedPatients.add(p);
 
             //System.out.println("No resource specified");
             //doDelete();
         }
         ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
+        ReceiveUnsubscriptionBehaviour uR = new ReceiveUnsubscriptionBehaviour(this);
         ResourceBehaviour r2 = new ResourceBehaviour(this);
-        SequentialBehaviour seq = new SequentialBehaviour();
-        seq.addSubBehaviour( new WakerBehaviour( this, 60000 )
+
+        inTreatmentBehaviour.addSubBehaviour( new WakerBehaviour( this, 20000 )
         {
             protected void onWake() {
                 System.out.println( "About to ask for times");
             }
         });
-        seq.addSubBehaviour(r2);
-        addBehaviour( seq );
+        inTreatmentBehaviour.addSubBehaviour(r2);
+
         addBehaviour(r);
+        addBehaviour(uR);
+        addBehaviour( inTreatmentBehaviour );
 
 
     }
 
     public void addSubscribedPatient(AID patient){
-        this.allPatients.add(patient);
+        this.allSubscribedPatients.add(patient);
     }
+
+    public void removeSubscribedPatient(AID patient){
+        if(this.allSubscribedPatients.contains(patient)){
+            this.allSubscribedPatients.remove(patient);
+        }
+    }
+
     protected void takeDown() {
         System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
     }
@@ -88,7 +107,7 @@ public class Resource extends Agent{
         this.nextPatient = nextPatient;
     }
 
-    public ArrayList<AID> getAllPatients() {
-        return allPatients;
+    public ArrayList<AID> getAllSubscribedPatients() {
+        return allSubscribedPatients;
     }
 }

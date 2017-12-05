@@ -23,10 +23,18 @@ public class AcceptResourceBehaviour extends CyclicBehaviour {
                 reply.setContent("Let's go!");
                 System.out.println("I am " + myAgent.getLocalName() + " and I agree to start my treatment");
                 myAgent.send(reply);
+                ACLMessage unMsg = new ACLMessage(ACLMessage.INFORM);
+                unMsg.setContent("Unsuscribe");
+                unMsg.setConversationId("unSubscription-process");
+                for (int i = 0; i < p.getCurrentResources().size(); ++i) {
+                    unMsg.addReceiver(p.getCurrentResources().get(i));
+                }
+                myAgent.send(unMsg);
+                p.finishTreatment();
             }else{
                 reply.setPerformative(ACLMessage.REFUSE);
                 reply.setContent("Not right now, sorry...");
-                System.out.println("I am " + myAgent.getLocalName() + " and I agree to start my treatment");
+                System.out.println("I am " + myAgent.getLocalName() + " and I will not start my treatment");
                 myAgent.send(reply);
             }
         }else{

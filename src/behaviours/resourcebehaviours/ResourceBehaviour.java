@@ -10,7 +10,6 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class ResourceBehaviour extends Behaviour {
@@ -35,19 +34,22 @@ public class ResourceBehaviour extends Behaviour {
 
         switch(step){
             case 0:
-                getAllProposals = r.getAllPatients().size();
+                getAllProposals = r.getAllSubscribedPatients().size();
                 ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
                 msg.setLanguage("English");
                 msg.setContent("When can you come?");
                 msg.setPerformative(ACLMessage.PROPOSE);
                 msg.setConversationId("licitation-process1");
-                for(int i = 0; i < r.getAllPatients().size(); i++){
-                    msg.addReceiver( r.getAllPatients().get(i));
-                }
-                myAgent.send(msg);
-                System.out.println(myAgent.getName() + " sent a message");
-                mt = MessageTemplate.MatchConversationId("licitation-process1");
-                step = 1;
+                if(r.getAllSubscribedPatients().isEmpty()){
+                    step = 6;
+                }else{
+                    for(int i = 0; i < r.getAllSubscribedPatients().size(); i++){
+                        msg.addReceiver( r.getAllSubscribedPatients().get(i));
+                    }
+                    myAgent.send(msg);
+                    System.out.println(myAgent.getName() + " sent a message");
+                    mt = MessageTemplate.MatchConversationId("licitation-process1");
+                    step = 1;}
                 break;
             case 1:
                 if(getAllProposals == 0){
@@ -56,11 +58,11 @@ public class ResourceBehaviour extends Behaviour {
                 else{
                     ACLMessage reply = myAgent.receive(mt);
                     if(reply != null){
-                        if(reply.getPerformative() == ACLMessage.AGREE && r.getAllPatients().contains(reply.getSender())){
+                        if(reply.getPerformative() == ACLMessage.AGREE && r.getAllSubscribedPatients().contains(reply.getSender())){
                             getAllProposals--;
                             allPreparedPatients.add(reply.getSender());
 
-                        }else if(reply.getPerformative() == ACLMessage.REFUSE && r.getAllPatients().contains(reply.getSender())){
+                        }else if(reply.getPerformative() == ACLMessage.REFUSE && r.getAllSubscribedPatients().contains(reply.getSender())){
                             getAllProposals--;
                         }
                     }else{
@@ -73,12 +75,15 @@ public class ResourceBehaviour extends Behaviour {
                 msg2.setLanguage("English");
                 msg2.setContent("What is your priority?");
                 msg2.setConversationId("licitation-process2");
-                for(int i = 0; i < allPreparedPatients.size(); i++){
-                    msg2.addReceiver( allPreparedPatients.get(i));
-                }
-                myAgent.send(msg2);
-                mt = MessageTemplate.MatchConversationId("licitation-process2");
-                step = 3;
+                if(allPreparedPatients.isEmpty()){
+                    step = 6;
+                }else{
+                    for(int i = 0; i < allPreparedPatients.size(); i++){
+                        msg2.addReceiver( allPreparedPatients.get(i));
+                    }
+                    myAgent.send(msg2);
+                    mt = MessageTemplate.MatchConversationId("licitation-process2");
+                    step = 3;}
                 break;
             case 3:
                 if(getAllProposals == allPreparedPatients.size()){
@@ -108,11 +113,13 @@ public class ResourceBehaviour extends Behaviour {
                 msg3.setLanguage("English");
                 msg3.setContent("You have been Accepted!");
                 msg3.setConversationId("licitation-process3");
-                msg3.addReceiver( patientPriorities.poll().getKey());
-
-                myAgent.send(msg3);
-                mt = MessageTemplate.MatchConversationId("licitation-process3");
-                step = 5;
+                if(patientPriorities.isEmpty()){
+                    step = 6;}
+                else{
+                    msg3.addReceiver( patientPriorities.poll().getKey());
+                    myAgent.send(msg3);
+                    mt = MessageTemplate.MatchConversationId("licitation-process3");
+                    step = 5;}
                 break;
             case 5:
                 ACLMessage reply = myAgent.receive(mt);
@@ -133,7 +140,16 @@ public class ResourceBehaviour extends Behaviour {
 
     @Override
     public boolean done() {
-
-        return step==6;
+        if(step==6){
+            getAllProposals = 0;
+            bestPriority = 0;
+            allPreparedPatients.clear();
+            patientPriorities.clear();
+            step = 0;
+            System.out.println("One iteration done");
+            return true;
+        } else{
+          return false;
+        }
     }
 }

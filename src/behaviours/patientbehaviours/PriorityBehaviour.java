@@ -17,7 +17,6 @@ public class PriorityBehaviour extends CyclicBehaviour{
     public void action() {
         ACLMessage msg= myAgent.receive(mt);
         if (msg != null) {
-            // Message received. Process it
             String msgContents = msg.getContent();
             ACLMessage reply = msg.createReply();
             System.out.println("Agent agents.Patient " + myAgent.getName() + " received " + msgContents);
