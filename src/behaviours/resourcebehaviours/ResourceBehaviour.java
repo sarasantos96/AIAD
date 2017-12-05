@@ -1,4 +1,4 @@
-package behaviours;
+package behaviours.resourcebehaviours;
 
 import agents.Resource;
 import utils.PrioritiesComparator;

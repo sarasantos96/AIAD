@@ -1,4 +1,4 @@
-package behaviours;
+package behaviours.patientbehaviours;
 
 import agents.Patient;
 import jade.core.AID;

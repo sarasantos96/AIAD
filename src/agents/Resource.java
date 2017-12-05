@@ -1,7 +1,7 @@
 package agents;
 
-import behaviours.ReceiveSubscriberBehaviour;
-import behaviours.ResourceBehaviour;
+import behaviours.resourcebehaviours.ReceiveSubscriberBehaviour;
+import behaviours.resourcebehaviours.ResourceBehaviour;
 import jade.core.*;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.WakerBehaviour;

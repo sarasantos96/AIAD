@@ -1,16 +1,14 @@
 package agents;
 
-import behaviours.AcceptResourceBehaviour;
-import behaviours.FindResourcesBehaviour;
-import behaviours.PatientBehaviour;
-import behaviours.PriorityBehaviour;
+import behaviours.patientbehaviours.AcceptResourceBehaviour;
+import behaviours.patientbehaviours.FindResourcesBehaviour;
+import behaviours.patientbehaviours.PatientBehaviour;
+import behaviours.patientbehaviours.PriorityBehaviour;
 import jade.core.*;
 import properties.Disease;
-import sun.awt.image.ImageWatched;
 import org.apache.commons.math3.distribution.NormalDistribution;
-import java.util.ArrayList;
+
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class Patient extends Agent{
     private String medical_condition;
