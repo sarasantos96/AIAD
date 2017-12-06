@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Patient extends Agent{
-    private String medical_condition = "Sick";
     private LinkedList<Treatment> treatments = new LinkedList<>();
     private ArrayList<AID> currentResources = new ArrayList<>();
     private boolean availability = true;
     private Disease disease;
     long tStart;
+    private boolean emergency = false;
 
     protected void setup(){
 
@@ -36,8 +36,9 @@ public class Patient extends Agent{
             treatments.add(Treatment.valueOf((String) args[2]));
         }catch (IllegalArgumentException e){
             System.err.println(e);
-
         }
+
+        emergency = Boolean.valueOf((String) args[3]);
 
         PriorityBehaviour p = new PriorityBehaviour(this);
         AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
@@ -54,7 +55,6 @@ public class Patient extends Agent{
     }
 
     protected void takeDown(){
-        medical_condition = "cured";
         availability = false;
         System.out.println("I, " + getAID().getLocalName() + " am cured.");
     }
@@ -131,6 +131,11 @@ public class Patient extends Agent{
         }
     }
 
+    public boolean isEmergency() {
+        return emergency;
+    }
 
-
+    public void setEmergency(boolean emergency) {
+        this.emergency = emergency;
+    }
 }

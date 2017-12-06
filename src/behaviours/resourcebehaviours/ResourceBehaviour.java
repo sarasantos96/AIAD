@@ -35,6 +35,10 @@ public class ResourceBehaviour extends Behaviour {
 
         switch(step){
             case 0:
+                if(r.getTreatingEmergency()){
+                    step = 4;
+                    break;
+                }
                 getAllProposals = r.getAllSubscribedPatients().size();
                 ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
                 msg.setLanguage("English");
@@ -53,6 +57,10 @@ public class ResourceBehaviour extends Behaviour {
                     step = 1;}
                 break;
             case 1:
+                if(r.getTreatingEmergency()){
+                    step = 4;
+                    break;
+                }
                 if(getAllProposals == 0){
                     step = 2;
                 }
@@ -72,6 +80,10 @@ public class ResourceBehaviour extends Behaviour {
                 }
                 break;
             case 2:
+                if(r.getTreatingEmergency()){
+                    step = 4;
+                    break;
+                }
                 ACLMessage msg2 = new ACLMessage(ACLMessage.CFP);
                 msg2.setLanguage("English");
                 msg2.setContent("What is your priority?");
@@ -87,6 +99,10 @@ public class ResourceBehaviour extends Behaviour {
                     step = 3;}
                 break;
             case 3:
+                if(r.getTreatingEmergency()){
+                    step = 4;
+                    break;
+                }
                 if(getAllProposals == allPreparedPatients.size()){
                     step = 4;
                 }
@@ -114,13 +130,21 @@ public class ResourceBehaviour extends Behaviour {
                 msg3.setLanguage("English");
                 msg3.setContent("You have been Accepted!");
                 msg3.setConversationId("licitation-process3");
-                if(patientPriorities.isEmpty()){
-                    step = 6;}
-                else{
-                    msg3.addReceiver( patientPriorities.poll().getKey());
+                if(r.getTreatingEmergency()){
+                    System.out.println("Attempting to heal emergency");
+                    msg3.addReceiver( r.getNextPatient());
                     myAgent.send(msg3);
                     mt = MessageTemplate.MatchConversationId("licitation-process3");
-                    step = 5;}
+                    step = 5;
+                }else{
+                    if(patientPriorities.isEmpty()){
+                        step = 6;}
+                    else{
+                        msg3.addReceiver( patientPriorities.poll().getKey());
+                        myAgent.send(msg3);
+                        mt = MessageTemplate.MatchConversationId("licitation-process3");
+                        step = 5;}
+                }
                 break;
             case 5:
                 ACLMessage reply = myAgent.receive(mt);
@@ -130,9 +154,17 @@ public class ResourceBehaviour extends Behaviour {
                         if(r.getAvailableTreatments().contains(Treatment.valueOf(nextTreatment))){
                         r.setNextPatient(reply.getSender());
                         r.setNextTreatment(Treatment.valueOf(nextTreatment));
+                        r.setTreatingEmergency(false);
                         System.out.println(nextTreatment);
                         }
                         step = 6;
+                    }else if(reply.getPerformative() == ACLMessage.REFUSE && r.getTreatingEmergency()){
+                        getAllProposals = 0;
+                        bestPriority = 0;
+                        allPreparedPatients.clear();
+                        patientPriorities.clear();
+                        r.setTreatingEmergency(false);
+                        step = 0;
                     }else if(reply.getPerformative() == ACLMessage.REFUSE){
                         step = 4;
                     }

@@ -16,13 +16,13 @@ import properties.Treatment;
 import java.util.ArrayList;
 
 public class Resource extends Agent{
-    private String name;
     private ArrayList<Treatment> availableTreatments = new ArrayList<>();
     private Treatment nextTreatment = Treatment.test;
-    private ArrayList<Pair<Integer, Patient>> reserves;
     private ArrayList<AID> allSubscribedPatients = new ArrayList<>();
     private AID nextPatient;
+    private Boolean treatingEmergency = false;
     private ResourceBehaviour r2 = new ResourceBehaviour(this);
+
 
 
     private SequentialBehaviour inTreatmentBehaviour = new SequentialBehaviour() {
@@ -47,16 +47,9 @@ public class Resource extends Agent{
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-         /*   this.name = (String) args[0];
-            System.out.println("agents.Resource name is " + this.name);
-            //TODO Definir como vão ser passados os tratamentos disponíveis e os pares
-        */
             DFAgentDescription dfd = new DFAgentDescription();
             dfd.setName(getAID());
          for(int i = 0; i < args.length; i ++){
-           //  AID p = new AID((String) args[i],AID.ISLOCALNAME);
-             //allSubscribedPatients.add(p);
-
              try{
                  availableTreatments.add(Treatment.valueOf((String) args[i]));
              }catch (IllegalArgumentException ex) {
@@ -78,9 +71,6 @@ public class Resource extends Agent{
             AID p = new AID("p",AID.ISLOCALNAME);
             p.getName();
             allSubscribedPatients.add(p);
-
-            //System.out.println("No resource specified");
-            //doDelete();
         }
         ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
         ReceiveUnsubscriptionBehaviour uR = new ReceiveUnsubscriptionBehaviour(this);
@@ -115,10 +105,6 @@ public class Resource extends Agent{
         System.out.println("agents.Resource agent " + getAID().getName() + " is terminating");
     }
 
-    public AID getNextPatient() {
-        return nextPatient;
-    }
-
     public void setNextPatient(AID nextPatient) {
         this.nextPatient = nextPatient;
     }
@@ -131,11 +117,19 @@ public class Resource extends Agent{
         return availableTreatments;
     }
 
-    public Treatment getNextTreatment() {
-        return nextTreatment;
-    }
-
     public void setNextTreatment(Treatment nextTreatment) {
         this.nextTreatment = nextTreatment;
+    }
+
+    public AID getNextPatient() {
+        return nextPatient;
+    }
+
+    public Boolean getTreatingEmergency() {
+        return treatingEmergency;
+    }
+
+    public void setTreatingEmergency(Boolean treatingEmergency) {
+        this.treatingEmergency = treatingEmergency;
     }
 }

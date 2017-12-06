@@ -25,11 +25,12 @@ public class Hospital {
         try {
             Object[] ob = new Object[2];
             ob[0] = "test";
-            Object[] ob2 = new Object[3];
+            Object[] ob2 = new Object[4];
             ob[1]="test2";
             ob2[0] = "DISEASE1";
             ob2[1] = "test";
             ob2[2] = "test2";
+            ob2[3] = "false";
             for(int i = 1; i <= num_patients; i++){
                 ac = containerController.createNewAgent("r"+i, "agents.Resource",  ob);
                 ac.start();

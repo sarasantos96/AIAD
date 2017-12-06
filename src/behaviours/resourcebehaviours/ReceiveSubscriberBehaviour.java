@@ -24,6 +24,10 @@ public class ReceiveSubscriberBehaviour extends CyclicBehaviour {
 
             System.out.println("I, " + myAgent.getName() + " justt received " + msgContents);
             r.addSubscribedPatient(msg.getSender());
+            if(msg.getPerformative() == ACLMessage.INFORM){
+                r.setTreatingEmergency(true);
+                r.setNextPatient(msg.getSender());
+            }
 
         }
         else{

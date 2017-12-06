@@ -33,7 +33,10 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
 
         //}
         try {
-            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            ACLMessage msg = new ACLMessage(ACLMessage.SUBSCRIBE);
+            if(p.isEmergency()){
+                msg.setPerformative(ACLMessage.INFORM);
+            }
             msg.setLanguage("English");
             msg.setContent("Suscribe");
 
