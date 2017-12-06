@@ -28,7 +28,7 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
 
             ServiceDescription sd = new ServiceDescription();
             sd.setType("treatment");
-            sd.setName(p.getTreatments().remove());
+            sd.setName(p.getTreatments().peek().name());
             template.addServices(sd);
 
         //}

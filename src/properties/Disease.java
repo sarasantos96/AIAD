@@ -1,14 +1,16 @@
 package properties;
 
-public class Disease {
+public enum Disease {
+    DISEASE1(1,2),
+    DISEASE2(2,2),
+    DISEASE3(32,2);
 
-    private String diseaseName;
+
     private int severity;
     private int criticality;
 
 
-    public Disease(String diseaseName, int severity, int criticality){
-        this.diseaseName = diseaseName;
+     Disease(int severity, int criticality){
         this.severity = severity;
         this.criticality = criticality;
     }

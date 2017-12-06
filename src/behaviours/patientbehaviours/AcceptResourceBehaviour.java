@@ -20,7 +20,7 @@ public class AcceptResourceBehaviour extends CyclicBehaviour {
             System.out.println("Agent agents.Patient " + myAgent.getName() + " received " + msg.getContent());
             if(p.getAvailability()){
                 reply.setPerformative(ACLMessage.AGREE);
-                reply.setContent("Let's go!");
+                reply.setContent(p.getTreatments().remove().name());
                 System.out.println("I am " + myAgent.getLocalName() + " and I agree to start my treatment");
                 myAgent.send(reply);
                 ACLMessage unMsg = new ACLMessage(ACLMessage.INFORM);

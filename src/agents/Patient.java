@@ -9,13 +9,14 @@ import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.WakerBehaviour;
 import properties.Disease;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import properties.Treatment;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Patient extends Agent{
     private String medical_condition = "Sick";
-    private LinkedList<String> treatments = new LinkedList<>();
+    private LinkedList<Treatment> treatments = new LinkedList<>();
     private ArrayList<AID> currentResources = new ArrayList<>();
     private boolean availability = true;
     private Disease disease;
@@ -24,14 +25,19 @@ public class Patient extends Agent{
     protected void setup(){
 
         Object[] args = getArguments();
-        disease = new Disease((String) args[0],Integer.parseInt((String)args[1]),Integer.parseInt((String)args[2]));
+        disease = Disease.DISEASE1;
         tStart = System.currentTimeMillis();
 
         PatientBehaviour r = new PatientBehaviour(this);
 
-        treatments.add("test");
-        treatments.add("test2");
+        try {
+            disease = Disease.valueOf((String) args[0]);
+            treatments.add(Treatment.valueOf((String) args[1]));
+            treatments.add(Treatment.valueOf((String) args[2]));
+        }catch (IllegalArgumentException e){
+            System.err.println(e);
 
+        }
 
         PriorityBehaviour p = new PriorityBehaviour(this);
         AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
@@ -108,7 +114,7 @@ public class Patient extends Agent{
         return elapsedSeconds;
     }
 
-    public LinkedList<String> getTreatments() {
+    public LinkedList<Treatment> getTreatments() {
         return treatments;
     }
 

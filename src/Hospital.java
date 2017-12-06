@@ -11,7 +11,7 @@ public class Hospital {
     {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("How many patients?");
+        System.out.print("How many resources?");
         int num_patients = scanner.nextInt();
 
         //Cria container
@@ -23,18 +23,21 @@ public class Hospital {
         AgentController ac = null;
 
         try {
-            Object[] ob = new Object[1];
+            Object[] ob = new Object[2];
             ob[0] = "test";
-            Object[] ob2 = new Object[1];
-            ob2[0] = "test2";
+            Object[] ob2 = new Object[3];
+            ob[1]="test2";
+            ob2[0] = "DISEASE1";
+            ob2[1] = "test";
+            ob2[2] = "test2";
             for(int i = 1; i <= num_patients; i++){
                 ac = containerController.createNewAgent("r"+i, "agents.Resource",  ob);
                 ac.start();
             }
-           ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
-           ac.start();
-           ac = containerController.createNewAgent("P", "agents.Patient",  null);
-           ac.start();
+           //ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
+           //ac.start();
+           AgentController ac2 = containerController.createNewAgent("P", "agents.Patient",  ob2);
+           ac2.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }

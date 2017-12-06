@@ -1,19 +1,23 @@
 package properties;
 
-public class Treatment {
-    private String name;
-    private int duration;
+public enum Treatment {
+    TREATMENT (10000),
+    TREATMENT2 (20000),
+    test(20000),
+    test2(30000);
 
-    public Treatment(String name, int duration) {
-        this.name = name;
+
+    private long duration;
+
+    Treatment(long duration){
         this.duration = duration;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public int getDuration() {
+
+
+
+    public long getDuration() {
         return duration;
     }
 }

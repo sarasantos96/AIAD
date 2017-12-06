@@ -17,14 +17,25 @@ import java.util.ArrayList;
 
 public class Resource extends Agent{
     private String name;
-    private ArrayList<Treatment> availableTreatments;
+    private ArrayList<Treatment> availableTreatments = new ArrayList<>();
+    private Treatment nextTreatment = Treatment.test;
     private ArrayList<Pair<Integer, Patient>> reserves;
     private ArrayList<AID> allSubscribedPatients = new ArrayList<>();
     private AID nextPatient;
+    private ResourceBehaviour r2 = new ResourceBehaviour(this);
+
 
     private SequentialBehaviour inTreatmentBehaviour = new SequentialBehaviour() {
+
+
         public int onEnd() {
-            reset();
+            this.addSubBehaviour(r2);
+            this.addSubBehaviour( new WakerBehaviour( myAgent, nextTreatment.getDuration() )
+            {
+                protected void onWake() {
+                    System.out.println( "About to ask for times for +" + nextTreatment.name());
+                }
+            });
             myAgent.addBehaviour(this);
             return super.onEnd();
         }
@@ -46,6 +57,11 @@ public class Resource extends Agent{
            //  AID p = new AID((String) args[i],AID.ISLOCALNAME);
              //allSubscribedPatients.add(p);
 
+             try{
+                 availableTreatments.add(Treatment.valueOf((String) args[i]));
+             }catch (IllegalArgumentException ex) {
+                 System.err.println("Illegal Treatment");
+            }
              ServiceDescription sd = new ServiceDescription();
              sd.setType("treatment");
              sd.setName((String)args[i]);
@@ -68,12 +84,12 @@ public class Resource extends Agent{
         }
         ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
         ReceiveUnsubscriptionBehaviour uR = new ReceiveUnsubscriptionBehaviour(this);
-        ResourceBehaviour r2 = new ResourceBehaviour(this);
+
 
         inTreatmentBehaviour.addSubBehaviour( new WakerBehaviour( this, 20000 )
         {
             protected void onWake() {
-                System.out.println( "About to ask for times");
+                System.out.println( "About to ask for times for +" + this.getWakeupTime());
             }
         });
         inTreatmentBehaviour.addSubBehaviour(r2);
@@ -109,5 +125,17 @@ public class Resource extends Agent{
 
     public ArrayList<AID> getAllSubscribedPatients() {
         return allSubscribedPatients;
+    }
+
+    public ArrayList<Treatment> getAvailableTreatments() {
+        return availableTreatments;
+    }
+
+    public Treatment getNextTreatment() {
+        return nextTreatment;
+    }
+
+    public void setNextTreatment(Treatment nextTreatment) {
+        this.nextTreatment = nextTreatment;
     }
 }

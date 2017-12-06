@@ -1,6 +1,7 @@
 package behaviours.resourcebehaviours;
 
 import agents.Resource;
+import properties.Treatment;
 import utils.PrioritiesComparator;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
@@ -125,7 +126,12 @@ public class ResourceBehaviour extends Behaviour {
                 ACLMessage reply = myAgent.receive(mt);
                 if(reply != null){
                     if(reply.getPerformative() == ACLMessage.AGREE){
+                        String nextTreatment = reply.getContent();
+                        if(r.getAvailableTreatments().contains(Treatment.valueOf(nextTreatment))){
                         r.setNextPatient(reply.getSender());
+                        r.setNextTreatment(Treatment.valueOf(nextTreatment));
+                        System.out.println(nextTreatment);
+                        }
                         step = 6;
                     }else if(reply.getPerformative() == ACLMessage.REFUSE){
                         step = 4;
