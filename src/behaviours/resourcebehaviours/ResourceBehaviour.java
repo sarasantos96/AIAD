@@ -35,6 +35,7 @@ public class ResourceBehaviour extends Behaviour {
 
         switch(step){
             case 0:
+                r.setStatus(0);
                 if(r.getTreatingEmergency()){
                     step = 4;
                     break;
@@ -57,6 +58,7 @@ public class ResourceBehaviour extends Behaviour {
                     step = 1;}
                 break;
             case 1:
+                r.setStatus(1);
                 if(r.getTreatingEmergency()){
                     step = 4;
                     break;
@@ -80,6 +82,7 @@ public class ResourceBehaviour extends Behaviour {
                 }
                 break;
             case 2:
+                r.setStatus(2);
                 if(r.getTreatingEmergency()){
                     step = 4;
                     break;
@@ -99,6 +102,7 @@ public class ResourceBehaviour extends Behaviour {
                     step = 3;}
                 break;
             case 3:
+                r.setStatus(3);
                 if(r.getTreatingEmergency()){
                     step = 4;
                     break;
@@ -126,6 +130,7 @@ public class ResourceBehaviour extends Behaviour {
 
                 break;
             case 4:
+                r.setStatus(4);
                 ACLMessage msg3 = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                 msg3.setLanguage("English");
                 msg3.setContent("You have been Accepted!");
@@ -147,6 +152,7 @@ public class ResourceBehaviour extends Behaviour {
                 }
                 break;
             case 5:
+                r.setStatus(5);
                 ACLMessage reply = myAgent.receive(mt);
                 if(reply != null){
                     if(reply.getPerformative() == ACLMessage.AGREE){

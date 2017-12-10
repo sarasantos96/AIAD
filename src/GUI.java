@@ -1,7 +1,11 @@
+import agents.Resource;
 import javafx.scene.input.MouseEvent;
 import properties.Treatment;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -102,11 +106,10 @@ public class GUI {
         //Obtaining all Resources
 
         JList list = createList(allNames);
-        list.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    //Add function for list
-                }
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                setResourceFields(list.getSelectedIndex());
             }
         });
         JScrollPane listScroller = createScroller(list);
@@ -148,7 +151,7 @@ public class GUI {
         //Last Patients Treated
 
         JList list3 = createList(null);
-        JLabel patientsLabel = new JLabel("Last treatment");
+        JLabel patientsLabel = new JLabel("Subscribed Patients");
         JScrollPane listScroller3 = createScroller(list3);
         JPanel patientsListPanel = new JPanel();
         patientsListPanel.setLayout(new BoxLayout(patientsListPanel, BoxLayout.PAGE_AXIS));
@@ -449,9 +452,44 @@ public class GUI {
     }
 
     private void setResourceFields(int index){
+        DefaultListModel l = new DefaultListModel();
+        Resource r = h.getAllResources().get(index);
+        for(int i =0; i< r.getAvailableTreatments().size(); i++){
+            l.addElement(r.getAvailableTreatments().get(i).name());
+        }
+        rTreatmentsList.setModel(l);
+        l = new DefaultListModel();
+        for(int i =0; i< r.getAllSubscribedPatients().size(); i++){
+            l.addElement(r.getAllSubscribedPatients().get(i).getLocalName());
+        }
+        rPatientsList.setModel(l);
+
+        if(r.getNextTreatment()!= null){
+        rCTreatment.setText(r.getNextTreatment().name());}
+        else{
+            rCTreatment.setText("None");
+        }
+
+        rCStatus.setText(String.valueOf(r.getStatus()));
+
+        if(r.getNextPatient()!= null){
+        rNextPatient.setText(r.getNextPatient().getLocalName());}
+        else{
+            rNextPatient.setText("None");
+        }
+
+        if(r.getTreatingEmergency()){
+            rEmergency.setVisible(true);
+        }else{
+            rEmergency.setVisible(false);
+        }
+
+        this.thisGUI.revalidate();
 
 
     }
+
+
 
     public void addPatient(String name){
         DefaultListModel l = (DefaultListModel<String>)this.pList.getModel();

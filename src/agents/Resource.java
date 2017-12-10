@@ -23,6 +23,7 @@ public class Resource extends Agent{
     private AID nextPatient;
     private Boolean treatingEmergency = false;
     private ResourceBehaviour r2 = new ResourceBehaviour(this);
+    private int status;
     private JFrame GUI;
 
 
@@ -46,6 +47,7 @@ public class Resource extends Agent{
 
         public int onEnd() {
             this.addSubBehaviour(r2);
+            setStatus(6);
             this.addSubBehaviour( new WakerBehaviour( myAgent, nextTreatment.getDuration() )
             {
                 protected void onWake() {
@@ -144,6 +146,19 @@ public class Resource extends Agent{
 
     public ArrayList<Treatment> getAvailableTreatments() {
         return availableTreatments;
+    }
+
+    public Treatment getNextTreatment() {
+        return nextTreatment;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+        this.GUI.revalidate();
     }
 
     public void setNextTreatment(Treatment nextTreatment) {
