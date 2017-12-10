@@ -36,7 +36,7 @@ public class Hospital {
         AgentController ac = null;
         if(s){
 
-        Resource r = new Resource(args,GUI.getGUI());
+        Resource r = new Resource(args,false,GUI.getGUI());
         try {
             ac = containerController.acceptNewAgent(name, r);
             ac.start();
@@ -47,7 +47,7 @@ public class Hospital {
             e.printStackTrace();
         } }else{
             String[] x = Arrays.copyOfRange(args,2,args.length);
-            Patient p = new Patient(args[0], x , Boolean.getBoolean(args[1]));
+            Patient p = new Patient(args[0], x , Boolean.getBoolean(args[1]),false);
             try {
                 ac = containerController.acceptNewAgent(name, p);
                 ac.start();
@@ -91,9 +91,69 @@ public class Hospital {
         createNewAgent(true, "r" + allResources.size(), args);
     }
 
-    public void startSim(){
+    public void startFCFSSim(){
         int num_resource = 2;
-        int num_patients = 5;
+        int num_patients = 3;
+
+        jade.core.Runtime runtime = jade.core.Runtime.instance();
+        Profile profile = new ProfileImpl();
+        profile.setParameter(Profile.MAIN_HOST, "localhost");
+        profile.setParameter(Profile.GUI, "true");
+        containerController = runtime.createMainContainer(profile);
+        AgentController ac = null;
+
+
+        String[] ob = new String[3];
+        ob[0] = "Acupunture";
+        String[] ob2 = new String[5];
+        ob[1]="Adenosine";
+        ob[2] = "MCH";
+        ob2[0] = "Tonsillitis";
+        ob2[1] = "false";
+        ob2[2] = "Acupunture";
+        ob2[3] = "MCH";
+        ob2[4] = "Adenosine";
+        try {
+            for(int i = 0; i < num_resource; i++){
+                Resource r = new Resource(ob,true,GUI.getGUI());
+                try {
+                    ac = containerController.acceptNewAgent("r" + i, r);
+                    ac.start();
+                    ac.activate();
+                    allResources.add(r);
+                    GUI.addResource(r.getLocalName());
+                } catch (StaleProxyException e) {
+                    e.printStackTrace();
+                }
+                Thread.sleep(1000);
+            }
+            for(int i = 0; i < num_patients; i++){
+                String[] x = Arrays.copyOfRange(ob2,2,ob2.length);
+                Patient p = new Patient(ob2[0], x , Boolean.getBoolean(ob2[1]),true);
+                try {
+                    ac = containerController.acceptNewAgent("p" + i, p);
+                    ac.start();
+                    ac.activate();
+                    allPatients.add(p);
+                    GUI.addPatient(p.getLocalName());
+                } catch (StaleProxyException e) {
+                    e.printStackTrace();
+                }
+                Thread.sleep(1000);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
+    public void startSim(){
+        int num_resource = 20;
+        int num_patients = 20;
 
         jade.core.Runtime runtime = jade.core.Runtime.instance();
         Profile profile = new ProfileImpl();
@@ -113,7 +173,7 @@ public class Hospital {
         ob2[3] = "test2";
         try {
         for(int i = 0; i < num_resource; i++){
-            createNewAgent(true,"r" + i, ob);
+            createNewResource();
             Thread.sleep(1000);
         }
             for(int i = 0; i < num_patients; i++){
@@ -135,7 +195,8 @@ public class Hospital {
         this.GUI = new GUI(this);
         GUI.runGUI(null);
 
-        // startSim();
+        //startSim();
+        startFCFSSim();
 
 
     }

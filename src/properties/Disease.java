@@ -6,9 +6,20 @@ import java.util.List;
 import java.util.Random;
 
 public enum Disease {
-    DISEASE1(1,2),
-    DISEASE2(2,2),
-    DISEASE3(32,2);
+    Myositis(1,5),
+    Lung_cancer(50,3),
+    Tonsillitis(32,2),
+    Diabetes(4,8),
+    Hepatitis_C(8,9),
+    Kawasaki_disease(49,23),
+    Siderosis(24,24),
+    Narcolepsy(1,1),
+    Zygomycosis(13,7),
+    Keratitis(1,20),
+    Myxedema(7,6);
+
+
+
 
     private int severity;
     private int criticality;

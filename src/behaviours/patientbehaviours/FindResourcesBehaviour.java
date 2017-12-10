@@ -38,7 +38,7 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
                 msg.setPerformative(ACLMessage.INFORM);
             }
             msg.setLanguage("English");
-            msg.setContent("Suscribe");
+            msg.setContent(p.getTreatments().peek().name());
 
             DFAgentDescription[] result = DFService.search(myAgent, template);
             for (int i = 0; i < result.length; ++i) {

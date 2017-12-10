@@ -6,8 +6,20 @@ import java.util.List;
 import java.util.Random;
 
 public enum Treatment {
-    test(20000),
-    test2(30000);
+    Acupunture(12000),
+    Adenosine(6000),
+    Allergy_shots(1000),
+    Homocysteine(16000),
+    Sclerotherapy(8000),
+    Keratecttomy(7000),
+    MCH(2000),
+    Microdermabrasion(4500),
+    Vasectomy(6400),
+    X_Ray(3300),
+    Joint_Injection(7500),
+    Laparoscopy(4000);
+
+
 
 
     private long duration;

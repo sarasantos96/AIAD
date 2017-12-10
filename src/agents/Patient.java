@@ -1,9 +1,6 @@
 package agents;
 
-import behaviours.patientbehaviours.AcceptResourceBehaviour;
-import behaviours.patientbehaviours.FindResourcesBehaviour;
-import behaviours.patientbehaviours.PatientBehaviour;
-import behaviours.patientbehaviours.PriorityBehaviour;
+import behaviours.patientbehaviours.*;
 import jade.core.*;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.core.behaviours.WakerBehaviour;
@@ -22,43 +19,52 @@ public class Patient extends Agent{
     private AID cResource;
     long tStart;
     private boolean emergency = false;
+    private boolean FCFSB;
 
-    public Patient(String disease, String[] treatments,boolean emergency){
+    public Patient(String disease, String[] treatments,boolean emergency, boolean FCFSB){
         this.disease = Disease.valueOf(disease);
         this.emergency = emergency;
+        this.FCFSB = FCFSB;
         for(int i = 0; i< treatments.length; i++){
             this.treatments.add(Treatment.valueOf((String) treatments[i]));}
     }
 
     protected void setup(){
 
-        Object[] args = getArguments();
-        disease = Disease.DISEASE1;
-        tStart = System.currentTimeMillis();
+        if(!FCFSB) {
+            Object[] args = getArguments();
+            //disease = Disease.DISEASE1;
+            tStart = System.currentTimeMillis();
 
-        PatientBehaviour r = new PatientBehaviour(this);
+            PatientBehaviour r = new PatientBehaviour(this);
 
-        if(args != null && args.length > 2){
-        try {
-            disease = Disease.valueOf((String) args[0]);
-            emergency = Boolean.valueOf((String) args[1]);
-            for(int i = 2; i< args.length; i++){
-            treatments.add(Treatment.valueOf((String) args[i]));}
-        }catch (IllegalArgumentException e){
-            System.err.println(e);
-        }}
+            if (args != null && args.length > 2) {
+                try {
+                    disease = Disease.valueOf((String) args[0]);
+                    emergency = Boolean.valueOf((String) args[1]);
+                    for (int i = 2; i < args.length; i++) {
+                        treatments.add(Treatment.valueOf((String) args[i]));
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e);
+                }
+            }
 
 
+            PriorityBehaviour p = new PriorityBehaviour(this);
+            AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
 
-        PriorityBehaviour p = new PriorityBehaviour(this);
-        AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
+            System.out.println("Patient start " + getAID().getName());
 
-        System.out.println("Patient start " + getAID().getName());
-
-        subscribeTreatments();
-        addBehaviour(r);
-        addBehaviour(p);
-        addBehaviour(a);
+            subscribeTreatments();
+            addBehaviour(r);
+            addBehaviour(p);
+            addBehaviour(a);
+        }else{
+            subscribeTreatments();
+            FCFSPatient fp = new FCFSPatient(this);
+            addBehaviour(fp);
+        }
 
 
 
@@ -97,6 +103,25 @@ public class Patient extends Agent{
         });
         seq.addSubBehaviour(f);
         addBehaviour(seq);
+    }
+
+    public void FCFSStartTreatment(){
+
+        SequentialBehaviour seq = new SequentialBehaviour();
+        seq.addSubBehaviour( new WakerBehaviour( this, this.getTreatments().poll().getDuration() )
+        {
+            protected void onWake() {
+                System.out.println( "Trying to start new treatment.");
+            }
+        });
+        if(!this.getTreatments().isEmpty()){
+        FindResourcesBehaviour f = new FindResourcesBehaviour(this);
+        seq.addSubBehaviour(f);
+        addBehaviour(seq);
+        }else{
+            System.out.println("I, "+ this.getLocalName() + " am cured");
+        }
+
     }
 
     public double getPriority(){
