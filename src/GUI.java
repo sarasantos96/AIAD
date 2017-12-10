@@ -83,6 +83,7 @@ public class GUI {
         JMenuItem simBtn = new JMenuItem("Start Simulation");
         simBtn.addActionListener((ActionEvent event) -> {
             h.startSim();
+            //h.startFCFSSim();
         });
         file.add(simBtn);
 
@@ -298,7 +299,7 @@ public class GUI {
         treatmentListPanel.setLayout(new BoxLayout(treatmentListPanel, BoxLayout.PAGE_AXIS));
         treatmentsLabel.setLabelFor(list2);
 
-        treatmentListPanel.setPreferredSize(new Dimension(3-70,80));
+        treatmentListPanel.setPreferredSize(new Dimension(370,80));
         treatmentListPanel.add(treatmentsLabel);
         treatmentListPanel.add(Box.createRigidArea(new Dimension(0,5)));
         treatmentListPanel.add(listScroller2);

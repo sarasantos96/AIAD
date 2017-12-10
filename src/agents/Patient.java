@@ -63,8 +63,19 @@ public class Patient extends Agent{
             addBehaviour(a);
         }else{
             tStart = System.currentTimeMillis();
-            subscribeTreatments();
+
+            SequentialBehaviour seq = new SequentialBehaviour();
+            seq.addSubBehaviour( new WakerBehaviour( this, 20000 )
+            {
+                protected void onWake() {
+                    System.out.println( "Trying to start new treatment.");
+                }
+            });
+            FindResourcesBehaviour f = new FindResourcesBehaviour(this);
+            seq.addSubBehaviour(f);
             FCFSPatient fp = new FCFSPatient(this);
+
+            addBehaviour(seq);
             addBehaviour(fp);
         }
 

@@ -107,8 +107,8 @@ public class Hospital {
     }
 
     public void startFCFSSim(){
-        int num_resource = 2;
-        int num_patients = 3;
+        int num_resource = 7;
+        int num_patients = 15;
 
         jade.core.Runtime runtime = jade.core.Runtime.instance();
         Profile profile = new ProfileImpl();
@@ -167,7 +167,7 @@ public class Hospital {
     }
 
     public void startSim(){
-        int num_resource = 20;
+        int num_resource = 5;
         int num_patients = 20;
 
         jade.core.Runtime runtime = jade.core.Runtime.instance();
@@ -178,14 +178,6 @@ public class Hospital {
         AgentController ac = null;
 
 
-        String[] ob = new String[2];
-        ob[0] = "test";
-        String[] ob2 = new String[4];
-        ob[1]="test2";
-        ob2[0] = "DISEASE1";
-        ob2[1] = "false";
-        ob2[2] = "test";
-        ob2[3] = "test2";
         try {
         for(int i = 0; i < num_resource; i++){
             createNewResource();
