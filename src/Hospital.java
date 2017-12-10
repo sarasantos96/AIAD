@@ -6,12 +6,15 @@ import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import properties.Disease;
+import properties.Treatment;
 
 import javax.swing.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Hospital {
     private GUI GUI;
@@ -58,7 +61,37 @@ public class Hospital {
 
     }
 
-    private void startSim(){
+    public void createNewPatient(){
+        Disease s = Disease.randomDisease();
+        int randomNum = ThreadLocalRandom.current().nextInt(0, 1 + 1);
+        int randomNum2 = ThreadLocalRandom.current().nextInt(1, Treatment.values().length + 1);
+        int l = randomNum2 + 2;
+        String[] args = new String[l];
+        args[0] = s.name();
+        if(randomNum == 0){
+            args[1] = "true";
+        }else{
+            args[1] = "false";
+        }
+
+        for(int i = 0; i < randomNum2; i++){
+            args[i + 2] = Treatment.randomTreatment().name();
+        }
+
+        createNewAgent(false, "p" + allPatients.size(), args);
+    }
+
+    public void createNewResource(){
+        int randomNum = ThreadLocalRandom.current().nextInt(1, Treatment.values().length + 1);
+        String[] args = new String[randomNum];
+        for(int i = 0; i < randomNum; i++){
+            args[i] = Treatment.randomTreatment().name();
+        }
+
+        createNewAgent(true, "r" + allResources.size(), args);
+    }
+
+    public void startSim(){
         int num_resource = 2;
         int num_patients = 5;
 
@@ -78,18 +111,21 @@ public class Hospital {
         ob2[1] = "false";
         ob2[2] = "test";
         ob2[3] = "test2";
+        try {
         for(int i = 0; i < num_resource; i++){
             createNewAgent(true,"r" + i, ob);
-        }
-        try {
             Thread.sleep(1000);
+        }
+            for(int i = 0; i < num_patients; i++){
+                createNewPatient();
+                Thread.sleep(1000);
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for(int i = 0; i < num_patients; i++){
-                createNewAgent(false,"p" + i, ob2);
-            }
+
 
 
     }
@@ -99,7 +135,7 @@ public class Hospital {
         this.GUI = new GUI(this);
         GUI.runGUI(null);
 
-        startSim();
+        // startSim();
 
 
     }

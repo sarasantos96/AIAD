@@ -47,11 +47,11 @@ public class Resource extends Agent{
 
         public int onEnd() {
             this.addSubBehaviour(r2);
-            setStatus(6);
             this.addSubBehaviour( new WakerBehaviour( myAgent, nextTreatment.getDuration() )
             {
                 protected void onWake() {
                     System.out.println( "About to ask for times for +" + nextTreatment.name());
+                    status = 6;
                 }
             });
             myAgent.addBehaviour(this);

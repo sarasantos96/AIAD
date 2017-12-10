@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
 
@@ -67,9 +69,21 @@ public class GUI {
 
         JMenuItem addResource = new JMenuItem("Add Resource");
         addResource.addActionListener((ActionEvent event) -> {
-            //h.createNewAgent(true);
+            h.createNewResource();
         });
         file.add(addResource);
+
+        JMenuItem addPatient = new JMenuItem("Add Patient");
+        addPatient.addActionListener((ActionEvent event) -> {
+            h.createNewPatient();
+        });
+        file.add(addPatient);
+
+        JMenuItem simBtn = new JMenuItem("Start Simulation");
+        simBtn.addActionListener((ActionEvent event) -> {
+            h.startSim();
+        });
+        file.add(simBtn);
 
         JMenuItem eMenuItem = new JMenuItem("Exit");
         eMenuItem.setMnemonic(KeyEvent.VK_E);
@@ -108,7 +122,8 @@ public class GUI {
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                setResourceFields(list.getSelectedIndex());
+
+                if(list.getSelectedIndex() != -1){setResourceFields(list.getSelectedIndex());}
             }
         });
         JScrollPane listScroller = createScroller(list);
@@ -242,7 +257,8 @@ public class GUI {
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                setPatientFields(list.getSelectedIndex());
+                if(list.getSelectedIndex() != -1){
+                setPatientFields(list.getSelectedIndex());}
             }
         });
         JScrollPane listScroller = createScroller(list);
@@ -430,6 +446,19 @@ public class GUI {
         //Display the window.
         thisGUI.pack();
         thisGUI.setVisible(true);
+
+
+        java.util.Timer timer = new Timer();
+        TimerTask myTask = new TimerTask() {
+            @Override
+            public void run() {
+                if(rList.getSelectedIndex() >= 0){
+                setResourceFields(rList.getSelectedIndex());}
+                if(pList.getSelectedIndex() >= 0){
+                setPatientFields(pList.getSelectedIndex());}
+            }
+        };
+        timer.schedule(myTask, 1000, 1000);
     }
 
     public void runGUI(String[] args) {

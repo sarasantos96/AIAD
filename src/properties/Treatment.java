@@ -1,8 +1,11 @@
 package properties;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 public enum Treatment {
-    TREATMENT (10000),
-    TREATMENT2 (20000),
     test(20000),
     test2(30000);
 
@@ -15,5 +18,14 @@ public enum Treatment {
 
     public long getDuration() {
         return duration;
+    }
+
+    private static final List<Treatment> VALUES =
+            Collections.unmodifiableList(Arrays.asList(values()));
+    private static final int SIZE = VALUES.size();
+    private static final Random RANDOM = new Random();
+
+    public static Treatment randomTreatment()  {
+        return VALUES.get(RANDOM.nextInt(SIZE));
     }
 }
