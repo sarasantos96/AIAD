@@ -1,3 +1,4 @@
+import agents.Patient;
 import agents.Resource;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
@@ -6,17 +7,22 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Hospital {
     private GUI GUI;
     private ContainerController containerController;
+    private ArrayList<Resource> allResources = new ArrayList<>();
 
-    public void createNewAgent(){
+    private ArrayList<Patient> allPatients = new ArrayList<>();
+
+    public void createNewAgent(boolean s){
         String[] ob = new String[2];
         ob[0] = "test";
         ob[1]="test2";
         AgentController ac = null;
+        if(true){
         Resource r = new Resource(ob,GUI.getGUI());
         try {
             ac = containerController.acceptNewAgent("r", r);
@@ -24,18 +30,21 @@ public class Hospital {
             ac.activate();
         } catch (StaleProxyException e) {
             e.printStackTrace();
-        }
+        } /*}else{
+            Patient p = new Patient(ob,GUI.getGUI());
+            try {
+                ac = containerController.acceptNewAgent("r", p);
+                ac.start();
+                ac.activate();
+            } catch (StaleProxyException e) {
+                e.printStackTrace();
+            }
+        }*/
 
-    }
+    }}
 
-    public Hospital()
-    {
-        this.GUI = new GUI(this);
-        GUI.runGUI(null);
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("How many resources?");
-        int num_patients = scanner.nextInt();
+    private void startSim(){
+        int num_patients = 2;
 
         //Cria container
         jade.core.Runtime runtime = jade.core.Runtime.instance();
@@ -62,13 +71,22 @@ public class Hospital {
                 ac.start();
                 ac.activate();
             }
-           //ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
-           //ac.start();
-           AgentController ac2 = containerController.createNewAgent("P", "agents.Patient",  ob2);
-           ac2.start();
+            //ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
+            //ac.start();
+            AgentController ac2 = containerController.createNewAgent("P", "agents.Patient",  ob2);
+            ac2.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+    }
+
+    public Hospital()
+    {
+        this.GUI = new GUI(this);
+        GUI.runGUI(null);
+
+        startSim();
+
 
     }
 

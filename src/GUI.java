@@ -11,11 +11,12 @@ import static java.awt.Component.LEFT_ALIGNMENT;
 
 public class GUI {
 
+
     private JFrame thisGUI;
     private JMenuBar menubar;
     private JTabbedPane tabbedPane;
 
-    private JList<String> resourceList;
+    private JList<String> rList;
     private JList<String> rTreatmentsList;
     private JList<String> rPatientsList;
 
@@ -24,7 +25,18 @@ public class GUI {
     private JLabel rNextPatient;
     private JLabel rEmergency;
 
-    
+    private JList<String> pList;
+    private JList<String> pTreatmentsList;
+    private JList<String> pSubscribedList;
+
+    private JLabel pDisease;
+    private JLabel pPriority;
+    private JLabel Emergency;
+    private JLabel pCResource;
+    private JLabel pCStatus;
+    private JLabel pNTreatment;
+
+
 
     private Hospital h;
 
@@ -52,7 +64,7 @@ public class GUI {
 
         JMenuItem addResource = new JMenuItem("Add Resource");
         addResource.addActionListener((ActionEvent event) -> {
-            h.createNewAgent();
+            h.createNewAgent(true);
         });
         file.add(addResource);
 
@@ -89,7 +101,14 @@ public class GUI {
 
         //Obtaining all Resources
 
-        JList list = createResourceList(data);
+        JList list = createList(data);
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    //Add function for list
+                }
+            }
+        });
         JScrollPane listScroller = createScroller(list);
         resourceList.setLayout(new BoxLayout(resourceList, BoxLayout.PAGE_AXIS));
         JLabel label = new JLabel("Resource List");
@@ -99,6 +118,7 @@ public class GUI {
         resourceList.add(Box.createRigidArea(new Dimension(0,5)));
         resourceList.add(listScroller);
         resourceList.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        this.rList = list;
 
 
 
@@ -123,6 +143,7 @@ public class GUI {
         treatmentListPanel.add(listScroller2);
         treatmentListPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         resourceCharacters.add(treatmentListPanel);
+        this.rTreatmentsList = list2;
 
         //Last Patients Treated
 
@@ -139,6 +160,7 @@ public class GUI {
         patientsListPanel.add(listScroller3);
         patientsListPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         resourceCharacters.add(patientsListPanel);
+        this.rPatientsList = list3;
 
         //LIst of status
 
@@ -154,16 +176,20 @@ public class GUI {
         currentTreatment.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         resourceStatus.add(currentTreatmentLabel);
         resourceStatus.add(currentTreatment);
+        this.rCTreatment = currentTreatment;
 
         //Current Status
 
-        JLabel currentPatientLabel = new JLabel("Current Patient:");
-        currentPatientLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        JLabel currentStatusLabel = new JLabel("Current Status:");
+        currentStatusLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-        JLabel currentPatient = new JLabel("None");
-        currentPatient.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        resourceStatus.add(currentPatientLabel);
-        resourceStatus.add(currentPatient);
+        JLabel currentStatus = new JLabel("None");
+        currentStatus.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        resourceStatus.add(currentStatusLabel);
+        resourceStatus.add(currentStatus);
+        this.rCStatus = currentStatus;
+
+
 
         //Next Patient
 
@@ -174,6 +200,7 @@ public class GUI {
         nextPatient.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         resourceStatus.add(nextPatientLabel);
         resourceStatus.add(nextPatient);
+        this.rNextPatient = nextPatient;
 
         //Emergency
 
@@ -181,6 +208,7 @@ public class GUI {
         nextPatientLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         EmergencyLabel.setVisible(false);
         resourceStatus.add(EmergencyLabel);
+        this.rEmergency= EmergencyLabel;
 
 
         resourceTab.add(resourceList);
@@ -189,43 +217,177 @@ public class GUI {
         return resourceTab;
     }
 
+    private JPanel createPatientTab(){
+        JPanel patientTab = new JPanel();
+        patientTab.setPreferredSize(new Dimension(610,290));
+
+        JPanel patientList = new JPanel();
+        JPanel patientCharacters = new JPanel();
+        JPanel patientStatus = new JPanel();
+
+        patientTab.setLayout(new FlowLayout());
+
+        patientList.setPreferredSize(new Dimension(300,225));
+
+        String[] data = new String[30];
+        for(int i = 0; i< 30; i++){
+            data[i] = "r" + i;
+        }
+
+        //Obtaining all Resources
+
+        JList list = createList(data);
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    //Add function for list
+                }
+            }
+        });
+        JScrollPane listScroller = createScroller(list);
+        patientList.setLayout(new BoxLayout(patientList, BoxLayout.PAGE_AXIS));
+        JLabel label = new JLabel("Patient List");
+        label.setLabelFor(list);
+
+        patientList.add(label);
+        patientList.add(Box.createRigidArea(new Dimension(0,5)));
+        patientList.add(listScroller);
+        patientList.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        this.rList = list;
+
+
+
+        //All Characteristics
+
+
+        patientCharacters.setPreferredSize(new Dimension(300,225));
+        patientCharacters.setLayout(new FlowLayout(FlowLayout.LEFT));
+        //resourceCharacters.setBackground(Color.BLUE);
+
+
+        //List of treatments
+        JList list2 = createList(data);
+        JLabel treatmentsLabel = new JLabel("Treatments Needed");
+        JScrollPane listScroller2 = createScroller(list2);
+        JPanel treatmentListPanel = new JPanel();
+        treatmentListPanel.setLayout(new BoxLayout(treatmentListPanel, BoxLayout.PAGE_AXIS));
+        treatmentsLabel.setLabelFor(list2);
+
+        treatmentListPanel.setPreferredSize(new Dimension(270,80));
+        treatmentListPanel.add(treatmentsLabel);
+        treatmentListPanel.add(Box.createRigidArea(new Dimension(0,5)));
+        treatmentListPanel.add(listScroller2);
+        treatmentListPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientCharacters.add(treatmentListPanel);
+        this.pTreatmentsList = list2;
+
+        //Resources Subscribed to
+
+        JList list3 = createList(null);
+        JLabel aubscribedLabel = new JLabel("Resources Subscribed to:");
+        JScrollPane listScroller3 = createScroller(list3);
+        JPanel subscribedListPanel = new JPanel();
+        subscribedListPanel.setLayout(new BoxLayout(subscribedListPanel, BoxLayout.PAGE_AXIS));
+        aubscribedLabel.setLabelFor(list3);
+
+        subscribedListPanel.setPreferredSize(new Dimension(270,80));
+        subscribedListPanel.add(aubscribedLabel);
+        subscribedListPanel.add(Box.createRigidArea(new Dimension(0,5)));
+        subscribedListPanel.add(listScroller3);
+        subscribedListPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientCharacters.add(subscribedListPanel);
+        this.pSubscribedList = list3;
+
+        //Disease
+        JLabel diseaseLabel = new JLabel("Disease:");
+        diseaseLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        JLabel disease = new JLabel("None");
+        disease.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientCharacters.add(diseaseLabel);
+        patientCharacters.add(disease);
+        this.pDisease = disease;
+
+        //Priority
+
+        JLabel priorityLabel = new JLabel("Priority:");
+        priorityLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        JLabel priority = new JLabel("None");
+        priority.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientCharacters.add(priorityLabel);
+        patientCharacters.add(priority);
+        this.pPriority = priority;
+
+
+        patientStatus.setPreferredSize(new Dimension(605,50));
+        patientStatus.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        //Next Treatment
+        JLabel currentTreatmentLabel = new JLabel("Next Treatment:");
+        currentTreatmentLabel.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
+
+        JLabel currentTreatment = new JLabel("None");
+        currentTreatment.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
+        patientStatus.add(currentTreatmentLabel);
+        patientStatus.add(currentTreatment);
+        this.pNTreatment = currentTreatment;
+
+        //Current Status
+
+        JLabel currentStatusLabel = new JLabel("Current Status:");
+        currentStatusLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        JLabel currentStatus = new JLabel("None");
+        currentStatus.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientStatus.add(currentStatusLabel);
+        patientStatus.add(currentStatus);
+        this.pCStatus = currentStatus;
+
+
+
+        //CurrentResource
+
+        JLabel currentResourceLabel = new JLabel("Current Resource:");
+        currentResourceLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+        JLabel currentResource = new JLabel("None");
+        currentResource.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+        patientStatus.add(currentResourceLabel);
+        patientStatus.add(currentResource);
+        this.pCResource = currentResource;
+
+        //Emergency
+
+        JLabel EmergencyLabel = new JLabel("Emergency!");
+        EmergencyLabel.setVisible(false);
+        patientCharacters.add(EmergencyLabel);
+        this.Emergency= EmergencyLabel;
+
+
+        patientTab.add(patientList);
+        patientTab.add(patientCharacters);
+        patientTab.add(patientStatus);
+        return patientTab;
+    }
+
     private void createTabbedPane(){
         JTabbedPane tabbedPane = new JTabbedPane();
 
         JPanel resourceTab = createResourceTab();
 
         tabbedPane.addTab("Resources", null, resourceTab,
-                "Does nothing");
+                "Resource Tab");
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
+        JPanel patientTab = createPatientTab();
 
-        //tabbedPane.addTab("Tab 2", null, paneleiro,
-             //   "Does twice as much nothing");
-        //tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
-        //tabbedPane.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+        tabbedPane.addTab("Patients", null, patientTab, "Patient Tab");
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
+        tabbedPane.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
         this.tabbedPane = tabbedPane;
     }
 
-    private JList<String> createResourceList(String[] data){
-        DefaultListModel<String> listModel = new DefaultListModel<>();
-        if(data != null){
-        for (String aData : data) {
-            listModel.addElement(aData);
-        }}
-        JList<String> list = new JList(listModel);
-        list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-
-        list.setLayoutOrientation(JList.VERTICAL);
-        list.setVisibleRowCount(-1);
-        list.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                   //Add function for list
-                }
-            }
-        });
-        return list;
-    }
     private JList<String> createList(String[] data){
         DefaultListModel<String> listModel = new DefaultListModel<>();
         if(data != null){
