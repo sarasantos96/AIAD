@@ -13,10 +13,6 @@ public enum Treatment {
         this.duration = duration;
     }
 
-
-
-
-
     public long getDuration() {
         return duration;
     }

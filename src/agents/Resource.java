@@ -13,6 +13,7 @@ import jade.domain.FIPAException;
 import javafx.util.Pair;
 import properties.Treatment;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Resource extends Agent{
@@ -22,8 +23,23 @@ public class Resource extends Agent{
     private AID nextPatient;
     private Boolean treatingEmergency = false;
     private ResourceBehaviour r2 = new ResourceBehaviour(this);
+    private JFrame GUI;
 
 
+    public Resource(String[] args, JFrame GUI){
+        this.GUI = GUI;
+        if (args != null && args.length > 0) {
+            for(int i = 0; i < args.length; i ++){
+                try{
+                    availableTreatments.add(Treatment.valueOf((String) args[i]));
+                }catch (IllegalArgumentException ex) {
+                    System.err.println("Illegal Treatment");
+                }
+
+            }
+        }
+
+    }
 
     private SequentialBehaviour inTreatmentBehaviour = new SequentialBehaviour() {
 
@@ -44,6 +60,15 @@ public class Resource extends Agent{
 
     protected void setup() {
         System.out.println("agents.Resource agent " + getAID().getLocalName() + " is ready.");
+
+        JLabel label = new JLabel(getAID().getLocalName());
+        label.setText(getAID().getLocalName());
+        GUI.getContentPane().add(label);
+        SwingUtilities.updateComponentTreeUI(GUI);
+        GUI.invalidate();
+        GUI.validate();
+        GUI.repaint();
+        label.setVisible(true);
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
@@ -68,9 +93,22 @@ public class Resource extends Agent{
                 fe.printStackTrace();
             }
         }else{
-            AID p = new AID("p",AID.ISLOCALNAME);
-            p.getName();
-            allSubscribedPatients.add(p);
+            DFAgentDescription dfd = new DFAgentDescription();
+            dfd.setName(getAID());
+            for(int i = 0; i < availableTreatments.size(); i ++){
+
+                ServiceDescription sd = new ServiceDescription();
+                sd.setType("treatment");
+                sd.setName((String)availableTreatments.get(i).name());
+                dfd.addServices(sd);
+                System.out.println("I have the treatment " + availableTreatments.get(i));
+            }
+            try {
+                DFService.register(this, dfd);
+            }
+            catch (FIPAException fe) {
+                fe.printStackTrace();
+            }
         }
         ReceiveSubscriberBehaviour r = new ReceiveSubscriberBehaviour(this);
         ReceiveUnsubscriptionBehaviour uR = new ReceiveUnsubscriptionBehaviour(this);

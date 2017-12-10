@@ -19,15 +19,7 @@ public enum Disease {
         return severity;
     }
 
-    public void setSeverity(int severity) {
-        this.severity = severity;
-    }
-
     public int getCriticality() {
         return criticality;
-    }
-
-    public void setCriticality(int criticality) {
-        this.criticality = criticality;
     }
 }

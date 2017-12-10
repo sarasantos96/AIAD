@@ -1,14 +1,37 @@
+import agents.Resource;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Hospital {
-    public static void main(String [] args)
+    private GUI GUI;
+    private ContainerController containerController;
+
+    public void createNewAgent(){
+        String[] ob = new String[2];
+        ob[0] = "test";
+        ob[1]="test2";
+        AgentController ac = null;
+        Resource r = new Resource(ob,GUI.getGUI());
+        try {
+            ac = containerController.acceptNewAgent("r", r);
+            ac.start();
+            ac.activate();
+        } catch (StaleProxyException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Hospital()
     {
+        this.GUI = new GUI(this);
+        GUI.runGUI(null);
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("How many resources?");
@@ -19,11 +42,11 @@ public class Hospital {
         Profile profile = new ProfileImpl();
         profile.setParameter(Profile.MAIN_HOST, "localhost");
         profile.setParameter(Profile.GUI, "true");
-        ContainerController containerController = runtime.createMainContainer(profile);
+        containerController = runtime.createMainContainer(profile);
         AgentController ac = null;
 
         try {
-            Object[] ob = new Object[2];
+            String[] ob = new String[2];
             ob[0] = "test";
             Object[] ob2 = new Object[4];
             ob[1]="test2";
@@ -32,8 +55,12 @@ public class Hospital {
             ob2[2] = "test2";
             ob2[3] = "false";
             for(int i = 1; i <= num_patients; i++){
-                ac = containerController.createNewAgent("r"+i, "agents.Resource",  ob);
+
+                Resource r = new Resource(ob,GUI.getGUI());
+
+                ac = containerController.acceptNewAgent("r"+i, r);
                 ac.start();
+                ac.activate();
             }
            //ac = containerController.createNewAgent("rFalso", "agents.Resource",  ob2);
            //ac.start();
@@ -44,4 +71,9 @@ public class Hospital {
         }
 
     }
+
+    public static void main(String args[]){
+        Hospital h = new Hospital();
+    }
 }
+
