@@ -55,7 +55,7 @@ public class Patient extends Agent{
             PriorityBehaviour p = new PriorityBehaviour(this);
             AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);
 
-            System.out.println("Patient start " + getAID().getName());
+            System.out.println("Creation of Patient " + getAID().getName());
 
             subscribeTreatments();
             addBehaviour(r);
@@ -68,7 +68,7 @@ public class Patient extends Agent{
             seq.addSubBehaviour( new WakerBehaviour( this, 20000 )
             {
                 protected void onWake() {
-                    System.out.println( "Trying to start new treatment.");
+                    System.out.println( "I, " + getLocalName() + " am trying to start new treatment.");
                 }
             });
             FindResourcesBehaviour f = new FindResourcesBehaviour(this);
@@ -112,7 +112,7 @@ public class Patient extends Agent{
         seq.addSubBehaviour( new WakerBehaviour( this, duration )
         {
             protected void onWake() {
-                System.out.println( "Trying to start new treatment.");
+                System.out.println( "I, " + getLocalName() + " am trying to start new treatment.");
             }
         });
         seq.addSubBehaviour(f);
@@ -125,7 +125,7 @@ public class Patient extends Agent{
         seq.addSubBehaviour( new WakerBehaviour( this, this.getTreatments().poll().getDuration() )
         {
             protected void onWake() {
-                System.out.println( "Trying to start new treatment.");
+                System.out.println( "I, " + getLocalName() + " am trying to start new treatment.");
             }
         });
         if(!this.getTreatments().isEmpty()){

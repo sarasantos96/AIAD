@@ -136,7 +136,7 @@ public class ResourceBehaviour extends Behaviour {
                 msg3.setContent("You have been Accepted!");
                 msg3.setConversationId("licitation-process3");
                 if(r.getTreatingEmergency()){
-                    System.out.println("Attempting to heal emergency");
+                    System.out.println("I, "+ r.getLocalName() +" Attempting to heal emergency");
                     msg3.addReceiver( r.getNextPatient());
                     myAgent.send(msg3);
                     mt = MessageTemplate.MatchConversationId("licitation-process3");
@@ -190,7 +190,7 @@ public class ResourceBehaviour extends Behaviour {
             allPreparedPatients.clear();
             patientPriorities.clear();
             step = 0;
-            System.out.println("One iteration done");
+            System.out.println("I, "+ r.getLocalName() +" just finished one iteration done");
             return true;
         } else{
           return false;

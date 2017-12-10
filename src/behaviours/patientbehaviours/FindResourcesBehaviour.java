@@ -42,7 +42,6 @@ public class FindResourcesBehaviour extends SimpleBehaviour {
 
             DFAgentDescription[] result = DFService.search(myAgent, template);
             for (int i = 0; i < result.length; ++i) {
-                System.out.println(result[i].getName().getLocalName());
                 msg.addReceiver(result[i].getName());
                 p.addResourceUse(result[i].getName());
 

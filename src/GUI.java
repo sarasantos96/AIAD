@@ -42,6 +42,8 @@ public class GUI {
     private JLabel pCStatus;
     private JLabel pNTreatment;
 
+    private int test = -1;
+
 
 
     private Hospital h;
@@ -70,28 +72,48 @@ public class GUI {
 
         JMenuItem addResource = new JMenuItem("Add Resource");
         addResource.addActionListener((ActionEvent event) -> {
-            h.createNewResource();
+            h.createNewResource(false);
         });
         file.add(addResource);
 
         JMenuItem addPatient = new JMenuItem("Add Patient");
         addPatient.addActionListener((ActionEvent event) -> {
-            h.createNewPatient();
+            h.createNewPatient(false);
+            test = 0;
         });
         file.add(addPatient);
 
         JMenuItem simBtn = new JMenuItem("Start Simulation");
         simBtn.addActionListener((ActionEvent event) -> {
-            h.startSim();
+            h.startSim(false);
             //h.startFCFSSim();
         });
         file.add(simBtn);
+
+        JMenuItem simBtn2 = new JMenuItem("Start FCFS Simulation");
+        simBtn2.addActionListener((ActionEvent event) -> {
+            h.startSim(true);
+            test = 1;
+
+            //h.startFCFSSim();
+        });
+        file.add(simBtn2);
 
         JMenuItem alBtn = new JMenuItem("Patient Time");
         alBtn.addActionListener((ActionEvent event) -> {
             showMessageDialog(null, "Current curing mean time:" + h.meanTime());
         });
         file.add(alBtn);
+
+        if(test ==0){
+            simBtn2.setEnabled(false);
+        }
+        else if(test == 1){
+            addPatient.setEnabled(false);
+
+            addResource.setEnabled(false);
+            simBtn.setEnabled(false);
+        }
 
 
         JMenuItem eMenuItem = new JMenuItem("Exit");
@@ -561,7 +583,11 @@ public class GUI {
             pCResource.setText("None");
         }
 
-        pCStatus.setText(String.valueOf(p.getAvailability()));
+        if(p.getAvailability()){
+            pCStatus.setText("Available");}
+        else{
+            pCStatus.setText("Busy");
+        }
 
         if(p.getTreatments().isEmpty()){
             pNTreatment.setText("Cured");

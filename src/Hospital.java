@@ -31,12 +31,17 @@ public class Hospital {
         return allPatients;
     }
 
-    public void createNewAgent(boolean s, String name , String[] args){
+    public void createNewAgent(boolean s, String name , String[] args,boolean fcfs){
 
         AgentController ac = null;
         if(s){
+            Resource r;
+            if(!fcfs){
+                r = new Resource(args,false,GUI.getGUI());}
+            else{
+                r = new Resource(args,true,GUI.getGUI());
+            }
 
-        Resource r = new Resource(args,false,GUI.getGUI());
         try {
             ac = containerController.acceptNewAgent(name, r);
             ac.start();
@@ -47,7 +52,12 @@ public class Hospital {
             e.printStackTrace();
         } }else{
             String[] x = Arrays.copyOfRange(args,2,args.length);
-            Patient p = new Patient(args[0], x , Boolean.getBoolean(args[1]),false);
+            Patient p ;
+            if(!fcfs){
+                p= new Patient(args[0], x , Boolean.getBoolean(args[1]),false);}
+            else{
+                p= new Patient(args[0], x , Boolean.getBoolean(args[1]),true);
+            }
             try {
                 ac = containerController.acceptNewAgent(name, p);
                 ac.start();
@@ -76,7 +86,7 @@ public class Hospital {
         return result;
     }
 
-    public void createNewPatient(){
+    public void createNewPatient(boolean fcfs){
         Disease s = Disease.randomDisease();
         int randomNum = ThreadLocalRandom.current().nextInt(0, 1 + 101);
         int randomNum2 = ThreadLocalRandom.current().nextInt(1, Treatment.values().length + 1);
@@ -93,20 +103,20 @@ public class Hospital {
             args[i + 2] = Treatment.randomTreatment().name();
         }
 
-        createNewAgent(false, "p" + allPatients.size(), args);
+        createNewAgent(false, "p" + allPatients.size(), args,fcfs);
     }
 
-    public void createNewResource(){
+    public void createNewResource(boolean fcfs){
         int randomNum = ThreadLocalRandom.current().nextInt(1, Treatment.values().length + 1);
         String[] args = new String[randomNum];
         for(int i = 0; i < randomNum; i++){
             args[i] = Treatment.randomTreatment().name();
         }
 
-        createNewAgent(true, "r" + allResources.size(), args);
+        createNewAgent(true, "r" + allResources.size(), args,fcfs);
     }
 
-    public void startFCFSSim(){
+    /*public void startFCFSSim(){
         int num_resource = 7;
         int num_patients = 15;
 
@@ -164,9 +174,9 @@ public class Hospital {
 
 
 
-    }
+    }*/
 
-    public void startSim(){
+    public void startSim(boolean fcfs){
         int num_resource = 5;
         int num_patients = 20;
 
@@ -180,11 +190,11 @@ public class Hospital {
 
         try {
         for(int i = 0; i < num_resource; i++){
-            createNewResource();
+            createNewResource(fcfs);
             Thread.sleep(1000);
         }
             for(int i = 0; i < num_patients; i++){
-                createNewPatient();
+                createNewPatient(fcfs);
                 Thread.sleep(1000);
             }
 
@@ -201,9 +211,6 @@ public class Hospital {
     {
         this.GUI = new GUI(this);
         GUI.runGUI(null);
-
-        //startSim();
-        //startFCFSSim();
 
 
     }

@@ -54,7 +54,7 @@ public class Resource extends Agent{
             this.addSubBehaviour( new WakerBehaviour( myAgent, nextTreatment.getDuration() )
             {
                 protected void onWake() {
-                    System.out.println( "About to ask for times for +" + nextTreatment.name());
+                    System.out.println( "I, "+ getLocalName() + " just finished " + nextTreatment.name());
                     status = 6;
                 }
             });
@@ -68,7 +68,7 @@ public class Resource extends Agent{
         s.addSubBehaviour( new WakerBehaviour( this, nextTreatment.getDuration() )
         {
             protected void onWake() {
-                System.out.println( "Just finished treating a patient with " + nextTreatment.name());
+                System.out.println( "I, "+ getLocalName() +" just finished treating a patient with " + nextTreatment.name());
                 status = 6;
                 FCFSReady = true;
             }
@@ -98,7 +98,7 @@ public class Resource extends Agent{
                     sd.setType("treatment");
                     sd.setName((String) args[i]);
                     dfd.addServices(sd);
-                    System.out.println("I have the treatment " + args[i]);
+                    System.out.println("I, "+ getLocalName() +" have the treatment " + args[i]);
                 }
                 try {
                     DFService.register(this, dfd);
@@ -114,7 +114,7 @@ public class Resource extends Agent{
                     sd.setType("treatment");
                     sd.setName((String) availableTreatments.get(i).name());
                     dfd.addServices(sd);
-                    System.out.println("I have the treatment " + availableTreatments.get(i));
+                    System.out.println("I, "+ getLocalName() +" have the treatment " + availableTreatments.get(i));
                 }
                 try {
                     DFService.register(this, dfd);
@@ -128,7 +128,7 @@ public class Resource extends Agent{
 
             inTreatmentBehaviour.addSubBehaviour(new WakerBehaviour(this, 20000) {
                 protected void onWake() {
-                    System.out.println("About to ask for times for +" + this.getWakeupTime());
+                    System.out.println("I, "+ getLocalName() +" am about to ask for times ");
                 }
             });
             inTreatmentBehaviour.addSubBehaviour(r2);
@@ -145,7 +145,7 @@ public class Resource extends Agent{
                 sd.setType("treatment");
                 sd.setName((String) availableTreatments.get(i).name());
                 dfd.addServices(sd);
-                System.out.println("I have the treatment " + availableTreatments.get(i));
+                System.out.println("I, "+ getLocalName() +" have the treatment " + availableTreatments.get(i));
 
 
             }
