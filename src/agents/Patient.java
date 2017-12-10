@@ -19,6 +19,7 @@ public class Patient extends Agent{
     private ArrayList<AID> currentResources = new ArrayList<>();
     private boolean availability = true;
     private Disease disease;
+    private AID cResource;
     long tStart;
     private boolean emergency = false;
 
@@ -138,6 +139,18 @@ public class Patient extends Agent{
         }else{
             this.takeDown();
         }
+    }
+
+    public Disease getDisease() {
+        return disease;
+    }
+
+    public AID getcResource() {
+        return cResource;
+    }
+
+    public void setcResource(AID cResource) {
+        this.cResource = cResource;
     }
 
     public boolean isEmergency() {

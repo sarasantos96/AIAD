@@ -1,11 +1,10 @@
+import agents.Patient;
 import agents.Resource;
 import javafx.scene.input.MouseEvent;
-import properties.Treatment;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -35,7 +34,7 @@ public class GUI {
 
     private JLabel pDisease;
     private JLabel pPriority;
-    private JLabel Emergency;
+    private JLabel pEmergency;
     private JLabel pCResource;
     private JLabel pCStatus;
     private JLabel pNTreatment;
@@ -205,9 +204,9 @@ public class GUI {
         resourceStatus.add(nextPatient);
         this.rNextPatient = nextPatient;
 
-        //Emergency
+        //pEmergency
 
-        JLabel EmergencyLabel = new JLabel("Emergency!");
+        JLabel EmergencyLabel = new JLabel("pEmergency!");
         nextPatientLabel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         EmergencyLabel.setVisible(false);
         resourceStatus.add(EmergencyLabel);
@@ -240,11 +239,10 @@ public class GUI {
         //Obtaining all Resources
 
         JList list = createList(data);
-        list.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    //Add function for list
-                }
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                setPatientFields(list.getSelectedIndex());
             }
         });
         JScrollPane listScroller = createScroller(list);
@@ -360,12 +358,12 @@ public class GUI {
         patientStatus.add(currentResource);
         this.pCResource = currentResource;
 
-        //Emergency
+        //pEmergency
 
-        JLabel EmergencyLabel = new JLabel("Emergency!");
+        JLabel EmergencyLabel = new JLabel("pEmergency!");
         EmergencyLabel.setVisible(false);
         patientCharacters.add(EmergencyLabel);
-        this.Emergency= EmergencyLabel;
+        this.pEmergency = EmergencyLabel;
 
 
         patientTab.add(patientList);
@@ -451,6 +449,8 @@ public class GUI {
 
     }
 
+
+
     private void setResourceFields(int index){
         DefaultListModel l = new DefaultListModel();
         Resource r = h.getAllResources().get(index);
@@ -496,6 +496,50 @@ public class GUI {
         l.addElement(name);
         this.pList.setModel(l);
         this.thisGUI.revalidate();
+    }
+
+    private void setPatientFields(int index){
+        DefaultListModel l = new DefaultListModel();
+        Patient p = h.getAllPatients().get(index);
+        for(int i =0; i< p.getTreatments().size(); i++){
+            l.addElement(p.getTreatments().get(i).name());
+        }
+        pTreatmentsList.setModel(l);
+        l = new DefaultListModel();
+        for(int i =0; i< p.getCurrentResources().size(); i++){
+            l.addElement(p.getCurrentResources().get(i).getLocalName());
+        }
+        pSubscribedList.setModel(l);
+
+
+        pDisease.setText(p.getDisease().name());
+
+
+        pPriority.setText(String.valueOf(p.getPriority()));
+
+        if(p.getcResource()!= null){
+            pCResource.setText(p.getcResource().getLocalName());}
+        else{
+            pCResource.setText("None");
+        }
+
+        pCStatus.setText(String.valueOf(p.getAvailability()));
+
+        if(p.getTreatments().isEmpty()){
+            pNTreatment.setText("Cured");
+        }else{
+            pNTreatment.setText(p.getTreatments().peek().name());
+        }
+
+        if(p.isEmergency()){
+            pEmergency.setVisible(true);
+        }else{
+            rEmergency.setVisible(false);
+        }
+
+        this.thisGUI.revalidate();
+
+
     }
 
 }
