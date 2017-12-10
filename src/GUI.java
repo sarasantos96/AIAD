@@ -108,7 +108,7 @@ public class GUI {
 
     private JPanel createResourceTab(){
         JPanel resourceTab = new JPanel();
-        resourceTab.setPreferredSize(new Dimension(610,290));
+        resourceTab.setPreferredSize(new Dimension(810,490));
 
         JPanel resourceList = new JPanel();
         JPanel resourceCharacters = new JPanel();
@@ -116,7 +116,7 @@ public class GUI {
 
         resourceTab.setLayout(new FlowLayout());
 
-        resourceList.setPreferredSize(new Dimension(300,225));
+        resourceList.setPreferredSize(new Dimension(400,325));
         // resourceList.setBackground(Color.RED);
 
         String[] allNames = new String[this.h.getAllResources().size()];
@@ -150,7 +150,7 @@ public class GUI {
         //All Characteristics
 
 
-        resourceCharacters.setPreferredSize(new Dimension(300,225));
+        resourceCharacters.setPreferredSize(new Dimension(400,325));
         //resourceCharacters.setBackground(Color.BLUE);
 
 
@@ -162,7 +162,7 @@ public class GUI {
         treatmentListPanel.setLayout(new BoxLayout(treatmentListPanel, BoxLayout.PAGE_AXIS));
         treatmentsLabel.setLabelFor(list2);
 
-        treatmentListPanel.setPreferredSize(new Dimension(270,115));
+        treatmentListPanel.setPreferredSize(new Dimension(370,80));
         treatmentListPanel.add(treatmentsLabel);
         treatmentListPanel.add(Box.createRigidArea(new Dimension(0,5)));
         treatmentListPanel.add(listScroller2);
@@ -179,7 +179,7 @@ public class GUI {
         patientsListPanel.setLayout(new BoxLayout(patientsListPanel, BoxLayout.PAGE_AXIS));
         patientsLabel.setLabelFor(list3);
 
-        patientsListPanel.setPreferredSize(new Dimension(270,100));
+        patientsListPanel.setPreferredSize(new Dimension(370,100));
         patientsListPanel.add(patientsLabel);
         patientsListPanel.add(Box.createRigidArea(new Dimension(0,5)));
         patientsListPanel.add(listScroller3);
@@ -189,7 +189,7 @@ public class GUI {
 
         //LIst of status
 
-        resourceStatus.setPreferredSize(new Dimension(605,50));
+        resourceStatus.setPreferredSize(new Dimension(805,150));
         //resourceStatus.setBackground(Color.GREEN);
         resourceStatus.setLayout(new FlowLayout(FlowLayout.LEFT));
 
@@ -244,7 +244,7 @@ public class GUI {
 
     private JPanel createPatientTab(){
         JPanel patientTab = new JPanel();
-        patientTab.setPreferredSize(new Dimension(610,290));
+        patientTab.setPreferredSize(new Dimension(810,490));
 
         JPanel patientList = new JPanel();
         JPanel patientCharacters = new JPanel();
@@ -252,7 +252,7 @@ public class GUI {
 
         patientTab.setLayout(new FlowLayout());
 
-        patientList.setPreferredSize(new Dimension(300,225));
+        patientList.setPreferredSize(new Dimension(400,325));
 
         String[] data = new String[this.h.getAllPatients().size()];
         for (int i =0; i < this.h.getAllPatients().size(); i++){
@@ -285,7 +285,7 @@ public class GUI {
         //All Characteristics
 
 
-        patientCharacters.setPreferredSize(new Dimension(300,225));
+        patientCharacters.setPreferredSize(new Dimension(400,325));
         patientCharacters.setLayout(new FlowLayout(FlowLayout.LEFT));
         //resourceCharacters.setBackground(Color.BLUE);
 
@@ -298,7 +298,7 @@ public class GUI {
         treatmentListPanel.setLayout(new BoxLayout(treatmentListPanel, BoxLayout.PAGE_AXIS));
         treatmentsLabel.setLabelFor(list2);
 
-        treatmentListPanel.setPreferredSize(new Dimension(270,80));
+        treatmentListPanel.setPreferredSize(new Dimension(3-70,80));
         treatmentListPanel.add(treatmentsLabel);
         treatmentListPanel.add(Box.createRigidArea(new Dimension(0,5)));
         treatmentListPanel.add(listScroller2);
@@ -315,7 +315,7 @@ public class GUI {
         subscribedListPanel.setLayout(new BoxLayout(subscribedListPanel, BoxLayout.PAGE_AXIS));
         aubscribedLabel.setLabelFor(list3);
 
-        subscribedListPanel.setPreferredSize(new Dimension(270,80));
+        subscribedListPanel.setPreferredSize(new Dimension(370,80));
         subscribedListPanel.add(aubscribedLabel);
         subscribedListPanel.add(Box.createRigidArea(new Dimension(0,5)));
         subscribedListPanel.add(listScroller3);
@@ -345,7 +345,7 @@ public class GUI {
         this.pPriority = priority;
 
 
-        patientStatus.setPreferredSize(new Dimension(605,50));
+        patientStatus.setPreferredSize(new Dimension(805,150));
         patientStatus.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         //Next Treatment

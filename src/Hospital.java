@@ -211,7 +211,7 @@ public class Hospital {
         GUI.runGUI(null);
 
         //startSim();
-        startFCFSSim();
+        //startFCFSSim();
 
 
     }
