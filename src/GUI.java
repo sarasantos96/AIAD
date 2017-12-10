@@ -13,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class GUI {
 
@@ -84,6 +85,13 @@ public class GUI {
             h.startSim();
         });
         file.add(simBtn);
+
+        JMenuItem alBtn = new JMenuItem("Patient Time");
+        alBtn.addActionListener((ActionEvent event) -> {
+            showMessageDialog(null, "Current curing mean time:" + h.meanTime());
+        });
+        file.add(alBtn);
+
 
         JMenuItem eMenuItem = new JMenuItem("Exit");
         eMenuItem.setMnemonic(KeyEvent.VK_E);

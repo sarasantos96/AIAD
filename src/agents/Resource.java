@@ -225,4 +225,6 @@ public class Resource extends Agent{
     public void setTreatingEmergency(Boolean treatingEmergency) {
         this.treatingEmergency = treatingEmergency;
     }
+
+
 }

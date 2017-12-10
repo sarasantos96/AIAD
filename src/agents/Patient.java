@@ -18,6 +18,7 @@ public class Patient extends Agent{
     private Disease disease;
     private AID cResource;
     long tStart;
+    double tFinish = -1;
     private boolean emergency = false;
     private boolean FCFSB;
 
@@ -61,6 +62,7 @@ public class Patient extends Agent{
             addBehaviour(p);
             addBehaviour(a);
         }else{
+            tStart = System.currentTimeMillis();
             subscribeTreatments();
             FCFSPatient fp = new FCFSPatient(this);
             addBehaviour(fp);
@@ -73,6 +75,7 @@ public class Patient extends Agent{
     protected void takeDown(){
         availability = false;
         System.out.println("I, " + getAID().getLocalName() + " am cured.");
+        tFinish = currTimeSeconds();
     }
 
     public void addResourceUse(AID p){
@@ -120,6 +123,7 @@ public class Patient extends Agent{
         addBehaviour(seq);
         }else{
             System.out.println("I, "+ this.getLocalName() + " am cured");
+            tFinish = currTimeSeconds();
         }
 
     }
@@ -184,5 +188,9 @@ public class Patient extends Agent{
 
     public void setEmergency(boolean emergency) {
         this.emergency = emergency;
+    }
+
+    public double gettFinish() {
+        return tFinish;
     }
 }
