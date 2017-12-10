@@ -22,6 +22,13 @@ public class Patient extends Agent{
     long tStart;
     private boolean emergency = false;
 
+    public Patient(String disease, String[] treatments,boolean emergency){
+        this.disease = Disease.valueOf(disease);
+        this.emergency = emergency;
+        for(int i = 0; i< treatments.length; i++){
+            this.treatments.add(Treatment.valueOf((String) treatments[i]));}
+    }
+
     protected void setup(){
 
         Object[] args = getArguments();
@@ -30,15 +37,17 @@ public class Patient extends Agent{
 
         PatientBehaviour r = new PatientBehaviour(this);
 
+        if(args != null && args.length > 2){
         try {
             disease = Disease.valueOf((String) args[0]);
-            treatments.add(Treatment.valueOf((String) args[1]));
-            treatments.add(Treatment.valueOf((String) args[2]));
+            emergency = Boolean.valueOf((String) args[1]);
+            for(int i = 2; i< args.length; i++){
+            treatments.add(Treatment.valueOf((String) args[i]));}
         }catch (IllegalArgumentException e){
             System.err.println(e);
-        }
+        }}
 
-        emergency = Boolean.valueOf((String) args[3]);
+
 
         PriorityBehaviour p = new PriorityBehaviour(this);
         AcceptResourceBehaviour a = new AcceptResourceBehaviour(this);

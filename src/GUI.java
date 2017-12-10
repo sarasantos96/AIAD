@@ -64,7 +64,7 @@ public class GUI {
 
         JMenuItem addResource = new JMenuItem("Add Resource");
         addResource.addActionListener((ActionEvent event) -> {
-            h.createNewAgent(true);
+            //h.createNewAgent(true);
         });
         file.add(addResource);
 
@@ -94,14 +94,14 @@ public class GUI {
         resourceList.setPreferredSize(new Dimension(300,225));
         // resourceList.setBackground(Color.RED);
 
-        String[] data = new String[30];
-        for(int i = 0; i< 30; i++){
-            data[i] = "r" + i;
+        String[] allNames = new String[this.h.getAllResources().size()];
+        for (int i =0; i < this.h.getAllResources().size(); i++){
+            allNames[i] = this.h.getAllResources().get(i).getLocalName();
         }
 
         //Obtaining all Resources
 
-        JList list = createList(data);
+        JList list = createList(allNames);
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -130,7 +130,7 @@ public class GUI {
 
 
         //List of treatments
-        JList list2 = createList(data);
+        JList list2 = createList(allNames);
         JLabel treatmentsLabel = new JLabel("Available Treatments");
         JScrollPane listScroller2 = createScroller(list2);
         JPanel treatmentListPanel = new JPanel();
@@ -229,9 +229,9 @@ public class GUI {
 
         patientList.setPreferredSize(new Dimension(300,225));
 
-        String[] data = new String[30];
-        for(int i = 0; i< 30; i++){
-            data[i] = "r" + i;
+        String[] data = new String[this.h.getAllPatients().size()];
+        for (int i =0; i < this.h.getAllPatients().size(); i++){
+            data[i] = this.h.getAllPatients().get(i).getLocalName();
         }
 
         //Obtaining all Resources
@@ -253,7 +253,7 @@ public class GUI {
         patientList.add(Box.createRigidArea(new Dimension(0,5)));
         patientList.add(listScroller);
         patientList.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-        this.rList = list;
+        this.pList = list;
 
 
 
@@ -438,6 +438,26 @@ public class GUI {
                 //createGUI();
             }
         });
+    }
+
+    public void addResource(String name){
+        DefaultListModel l = (DefaultListModel<String>)this.rList.getModel();
+        l.addElement(name);
+        this.rList.setModel(l);
+        this.thisGUI.revalidate();
+
+    }
+
+    private void setResourceFields(int index){
+
+
+    }
+
+    public void addPatient(String name){
+        DefaultListModel l = (DefaultListModel<String>)this.pList.getModel();
+        l.addElement(name);
+        this.pList.setModel(l);
+        this.thisGUI.revalidate();
     }
 
 }

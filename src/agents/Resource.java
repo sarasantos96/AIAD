@@ -61,15 +61,6 @@ public class Resource extends Agent{
     protected void setup() {
         System.out.println("agents.Resource agent " + getAID().getLocalName() + " is ready.");
 
-        JLabel label = new JLabel(getAID().getLocalName());
-        label.setText(getAID().getLocalName());
-        GUI.getContentPane().add(label);
-        SwingUtilities.updateComponentTreeUI(GUI);
-        GUI.invalidate();
-        GUI.validate();
-        GUI.repaint();
-        label.setVisible(true);
-
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
             DFAgentDescription dfd = new DFAgentDescription();
